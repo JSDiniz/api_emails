@@ -8,9 +8,9 @@ export async function sendEmailToDoctor(data: any) {
   const { enderecoRua, cidade, estado, cep } = parseAddress(data.city);
 
   const { error } = await resend.emails.send({
-    from: "Agendamentos <dra.estefany@digimig.com.br>",
+    from: `Agendamento <${process.env.DOCTOR_EMAIL}>`,
     // to: ["contato@digimig.com.br"],
-    to: [process.env.DOCTOR_EMAIL as string],
+    to: [process.env.GOOGLE_CALENDAR_ID as string],
     subject: `Novo agendamento - ${data.service}`,
     html: `
       <h2>Novo agendamento</h2>
@@ -33,7 +33,7 @@ export async function sendEmailToPatient(data: any) {
   const { enderecoRua, cidade, estado, cep } = parseAddress(data.city);
 
   const { error } = await resend.emails.send({
-    from: "Agendamentos <dra.estefany@digimig.com.br>",
+    from: `Agendamento <${process.env.DOCTOR_EMAIL}>`,
     to: data.email,
     subject: "Agendamento confirmado ✅",
     html: `
