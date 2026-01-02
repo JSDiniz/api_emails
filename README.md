@@ -5,8 +5,10 @@ API REST desenvolvida em Node.js com TypeScript para gerenciar agendamentos de c
 ## 📋 Funcionalidades
 
 - ✅ Criar agendamentos de consultas
-- 📅 Integração com Google Calendar para criar eventos automaticamente
+- 🗑️ Cancelar/deletar agendamentos
+- 📅 Integração com Google Calendar para criar e deletar eventos automaticamente
 - 📧 Envio de emails de confirmação para paciente e médico
+- 📧 Envio de email de cancelamento para o médico
 - 📍 Parse automático de endereços (rua, cidade, estado, CEP)
 - 📊 Listagem de agendamentos futuros do calendário
 
@@ -27,15 +29,22 @@ api_emails/
 ├── src/
 │   ├── @types/           # Definições de tipos TypeScript customizados
 │   ├── controllers/      # Controladores das rotas
-│   │   ├── createAppointmentController.ts
-│   │   └── getAppointmentsController.ts
+│   │   ├── appointment/
+│   │   │   ├── createAppointmentController.ts
+│   │   │   ├── getAppointmentsController.ts
+│   │   │   └── deleteAppointmentsController.ts
 │   ├── routes/           # Definição das rotas da API
 │   │   └── appointments.routes.ts
 │   ├── services/         # Serviços de integração externa
-│   │   ├── emailService.ts      # Serviço de envio de emails (Resend)
-│   │   └── googleCalendar.ts    # Configuração do Google Calendar API
+│   │   ├── email/
+│   │   │   └── emailService.ts      # Serviço de envio de emails (Resend)
+│   │   └── appointment/
+│   │       ├── createAppointmentServices.ts
+│   │       ├── getAppointmentsServices.ts
+│   │       └── deleteAppointmentsServices.ts
 │   ├── utils/            # Funções utilitárias
-│   │   └── parseAddress.ts      # Parser de endereços
+│   │   ├── parseAddress.ts      # Parser de endereços
+│   │   └── parseGoogleEvent.ts  # Parser de eventos do Google Calendar
 │   └── server.ts         # Configuração do servidor Express
 ├── .env.example          # Exemplo de variáveis de ambiente
 ├── .gitignore           # Arquivos ignorados pelo Git
@@ -61,6 +70,15 @@ Quando um novo agendamento é criado:
 ### 2. Listagem de Agendamentos (GET /appointments)
 
 Retorna os próximos 20 eventos agendados do Google Calendar, ordenados por data/hora.
+
+### 3. Cancelamento de Agendamento (DELETE /appointments/:calendarId/:eventId)
+
+Quando um agendamento é cancelado:
+
+1. **Busca do Evento**: O sistema busca o evento no Google Calendar usando o `calendarId` e `eventId`
+2. **Parse dos Dados**: Os dados do evento são parseados para o formato padrão
+3. **Exclusão no Google Calendar**: O evento é removido do calendário
+4. **Envio de Email**: Um email de cancelamento é enviado automaticamente para o médico com todas as informações do agendamento cancelado
 
 ## ⚙️ Configuração
 
@@ -188,6 +206,32 @@ Lista os próximos agendamentos.
 ]
 ```
 
+### DELETE /appointments/:calendarId/:eventId
+
+Cancela/deleta um agendamento existente.
+
+**Path Parameters:**
+- `calendarId`: ID do calendário do Google Calendar (obrigatório)
+- `eventId`: ID do evento a ser cancelado (obrigatório)
+
+**Response (200):**
+```json
+{
+  "message": "Evento event-id-123 deletado com sucesso"
+}
+```
+
+**Response (400):**
+```json
+{
+  "message": "calendarId e eventId são obrigatórios"
+}
+```
+
+**Nota:** Ao cancelar um agendamento, o sistema:
+- Remove o evento do Google Calendar
+- Envia automaticamente um email de cancelamento para o médico com os detalhes do agendamento cancelado
+
 ## 🔧 Desenvolvimento
 
 ### Scripts Disponíveis
@@ -208,6 +252,8 @@ Lista os próximos agendamentos.
 - Os eventos no Google Calendar têm duração fixa de 30 minutos
 - O timezone está configurado para `America/Manaus`
 - Os emails são enviados de forma assíncrona, não bloqueando a resposta da API
+- Ao cancelar um agendamento, o evento é removido do Google Calendar e um email de notificação é enviado ao médico
+- A rota de exclusão requer tanto o `calendarId` quanto o `eventId` como parâmetros da URL
 
 ## 🔒 Segurança
 
