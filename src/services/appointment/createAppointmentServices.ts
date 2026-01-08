@@ -3,6 +3,8 @@ import { calendar } from "../../integrations/google/googleCalendar";
 import { parseAddress } from "../../utils/parseAddress";
 import { sendEmailToDoctor, sendEmailToPatient } from "../email/emailService";
 
+const REMINDER_MINUTES = 60 * 24;
+
 export async function createAppointmentServices(data) {
   const { name, email, phone, city, service, date, time, message } = data;
 
@@ -41,6 +43,21 @@ export async function createAppointmentServices(data) {
       end: {
         dateTime: endDateTime,
         timeZone: "America/Manaus",
+      },
+
+      // ✅ AQUI está a correção
+      reminders: {
+        useDefault: false,
+        overrides: [
+          {
+            method: "email",
+            minutes:  REMINDER_MINUTES, // 24 horas
+          },
+          {
+            method: "popup",
+            minutes:  REMINDER_MINUTES, // 24 horas
+          },
+        ],
       },
     },
   });
