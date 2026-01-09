@@ -1,26 +1,26 @@
 import { Resend } from "resend";
 import "dotenv/config";
-import { parseAddress } from "../../utils/parseAddress";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function sendEmailToDoctor(data: any) {
-  const { enderecoRua, cidade, estado, cep } = parseAddress(data.city);
+  const { name, clinic, service, date, time } = data;
+
+  const formattedDate = new Date(date).toLocaleDateString("pt-BR");
 
   const { error } = await resend.emails.send({
-    from: "Agendamentos <agendamento@estefanyoliveira.com.br>",
-    // to: ["contato@digimig.com.br"],
+    from: `Agendamentos <${process.env.EMAIL_FROM as string}>`,
     to: [process.env.DOCTOR_EMAIL as string],
     subject: `Novo agendamento - ${data.service}`,
     html: `
       <h2>Novo agendamento</h2>
-      <p><strong>Paciente:</strong> ${data.name}</p>
-      <p><strong>Cidade:</strong> ${cidade} - ${estado}</p>
-      <p><strong>Endereço:</strong> ${enderecoRua}</p>
-      <p><strong>CEP:</strong> ${cep}</p>
-      <p><strong>Service:</strong> ${data.service}</p>
-      <p><strong>Data:</strong> ${data.date}</p>
-      <p><strong>Horário:</strong> ${data.time}</p>
+      <p><strong>Paciente:</strong> ${name}</p>
+      <p><strong>Cidade:</strong> ${clinic.city} - ${clinic.state}</p>
+      <p><strong>Endereço:</strong> ${clinic.street}, ${clinic.number}, ${clinic.neighborhood}</p>
+      <p><strong>CEP:</strong> ${clinic.zip}</p>
+      <p><strong>Service:</strong> ${service}</p>
+      <p><strong>Data:</strong> ${formattedDate}</p>
+      <p><strong>Horário:</strong> ${time}</p>
     `,
   });
 
@@ -30,20 +30,23 @@ export async function sendEmailToDoctor(data: any) {
 }
 
 export async function sendEmailToPatient(data: any) {
-  const { enderecoRua, cidade, estado, cep } = parseAddress(data.city);
+  const { clinic, service, date, time } = data;
+
+  const formattedDate = new Date(date).toLocaleDateString("pt-BR");
 
   const { error } = await resend.emails.send({
-    from: "Agendamentos <agendamento@estefanyoliveira.com.br>",
+    from: `Agendamentos <${process.env.EMAIL_FROM as string}>`,
     to: data.email,
     subject: "Agendamento confirmado ✅",
     html: `
       <h2>Agendamento confirmado</h2>
-      <p><strong>Cidade:</strong> ${cidade} - ${estado}</p>
-      <p><strong>Endereço:</strong> ${enderecoRua}</p>
-      <p><strong>CEP:</strong> ${cep}</p>
-      <p><strong>Serviço:</strong> ${data.service}</p>
-      <p><strong>Data:</strong> ${data.date}</p>
-      <p><strong>Horário:</strong> ${data.time}</p>
+      <p><strong>Dra.:</strong> ${process.env.DOCTOR_NAME}</p>
+      <p><strong>Cidade:</strong> ${clinic.city} - ${clinic.state}</p>
+      <p><strong>Endereço:</strong> ${clinic.street}, ${clinic.number}, ${clinic.neighborhood}</p>
+      <p><strong>CEP:</strong> ${clinic.zip}</p>
+      <p><strong>Service:</strong> ${service}</p>
+      <p><strong>Data:</strong> ${formattedDate}</p>
+      <p><strong>Horário:</strong> ${time}</p>
     `,
   });
 
@@ -53,12 +56,14 @@ export async function sendEmailToPatient(data: any) {
 }
 
 export async function sendCancellationEmailToDoctor(data: any) {
-  const { enderecoRua, cidade, estado, cep } = parseAddress(data.city);
+  const { name, clinic, service, date, time } = data;
+
+  const formattedDate = new Date(date).toLocaleDateString("pt-BR");
 
   const { error } = await resend.emails.send({
-    from: "Agendamentos <agendamento@estefanyoliveira.com.br>",
+    from: `Agendamentos <${process.env.EMAIL_FROM as string}>`,
     to: [process.env.DOCTOR_EMAIL as string],
-    subject: `Agendamento cancelado - ${data.service}`,
+    subject: `Agendamento cancelado - ${formattedDate}`,
     html: `
       <h2 style="color: #c0392b;">Agendamento cancelado ❌</h2>
 
@@ -66,16 +71,16 @@ export async function sendCancellationEmailToDoctor(data: any) {
 
       <hr />
 
-      <p><strong>Paciente:</strong> ${data.name}</p>
-      <p><strong>Serviço:</strong> ${data.service}</p>
-      <p><strong>Data:</strong> ${data.date}</p>
-      <p><strong>Horário:</strong> ${data.time}</p>
+      <p><strong>Paciente:</strong> ${name}</p>
+      <p><strong>Serviço:</strong> ${service}</p>
+      <p><strong>Data:</strong> ${formattedDate}</p>
+      <p><strong>Horário:</strong> ${time}</p>
 
       <br />
 
-      <p><strong>Cidade:</strong> ${cidade} - ${estado}</p>
-      <p><strong>Endereço:</strong> ${enderecoRua}</p>
-      <p><strong>CEP:</strong> ${cep}</p>
+      <p><strong>Cidade:</strong> ${clinic.city} - ${clinic.state}</p>
+      <p><strong>Endereço:</strong> ${clinic.street}, ${clinic.number}, ${clinic.neighborhood}</p>
+      <p><strong>CEP:</strong> ${clinic.zip}</p>
 
       <hr />
 
@@ -86,6 +91,9 @@ export async function sendCancellationEmailToDoctor(data: any) {
   });
 
   if (error) {
-    console.error("Erro ao enviar email de cancelamento para a doutora:", error);
+    console.error(
+      "Erro ao enviar email de cancelamento para a doutora:",
+      error
+    );
   }
 }

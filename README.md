@@ -170,19 +170,27 @@ Cria um novo agendamento.
 {
   "name": "João Silva",
   "email": "joao@example.com",
-  "phone": "(92) 99999-9999",
-  "city": "Av. Djalma Batista, 946 - Nossa Sra. das Graças, Manaus - AM - 69050-010",
+  "phone": "92 99999-9999",
   "service": "Consulta",
   "date": "2024-12-25",
-  "time": "14:30",
-  "message": "Mensagem opcional do paciente"
+  "time": "10:30",
+  "message": "Mensagem opcional do paciente",
+  "clinic": {
+    "id": 2,
+    "street": "Rua Exemplo",
+    "number": "2615",
+    "neighborhood": "Centro",
+    "city": "Itacoatiara",
+    "state": "AM",
+    "zip": "69100-000"
+  }
 }
 ```
 
 **Response (201):**
 ```json
 {
-  "message": "Agendamento realizado com sucesso para João Silva no endereço Av. Djalma Batista, 946 - Nossa Sra. das Graças, Manaus - AM - 69050-010.\nServiço: Consulta\nData: 2024-12-25 às 14:30.\nVocê receberá um e-mail com todas as informações do agendamento."
+  "message": "Agendamento realizado com sucesso para João Silva no endereço Rua Exemplo, 946, Centro, Manaus - AM, 69050-010.\nServiço: Consulta\nData: 25-12-2024 às 14:30.\nVocê receberá um e-mail com todas as informações do agendamento."
 }
 ```
 

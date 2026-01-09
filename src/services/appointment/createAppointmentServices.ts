@@ -1,14 +1,41 @@
 import "dotenv/config";
 import { calendar } from "../../integrations/google/googleCalendar";
-import { parseAddress } from "../../utils/parseAddress";
 import { sendEmailToDoctor, sendEmailToPatient } from "../email/emailService";
 
 const REMINDER_MINUTES = 60 * 24;
 
-export async function createAppointmentServices(data) {
-  const { name, email, phone, city, service, date, time, message } = data;
+export type ClinicAddress = {
+  id: number;
+  street: string;
+  number: string;
+  neighborhood: string;
+  city: string;
+  state: string;
+  zip: string;
+};
 
-  const { enderecoRua, cidade, estado, cep } = parseAddress(city);
+interface FormData {
+  name: string;
+  email: string;
+  phone?: string;
+  service: string;
+  date: string;
+  time: string;
+  message: string;
+  clinic: ClinicAddress;
+}
+
+// Define cores por cidade
+const cityColors: Record<string, string> = {
+  Manaus: "1",
+  Itacoatiara: "11",
+};
+
+export async function createAppointmentServices(data: FormData) {
+  const { name, email, phone, clinic, service, date, time, message } = data;
+
+  // pega a cor baseado na cidade, se não encontrar usa padrão "4"
+  const eventColor = clinic?.city ? cityColors[clinic.city] || "2" : "2";
 
   // 🔹 Start no formato LOCAL
   const startDateTime = `${date}T${time}:00`;
@@ -25,14 +52,14 @@ export async function createAppointmentServices(data) {
   await calendar.events.insert({
     calendarId: process.env.GOOGLE_CALENDAR_ID as string,
     requestBody: {
-      summary: `Consulta - ${name}`,
+      summary: `${name} - ${service}`,
       description: `
         Paciente: ${name}
         Serviço: ${service}
         Email: ${email}
-        Cidade: ${cidade} - ${estado}</p>
-        Endereço: ${enderecoRua}</p>
-        CEP: ${cep}</p>
+        Cidade: ${clinic.city} - ${clinic.state}
+        Endereço: ${clinic.street}, ${clinic.number} - ${clinic.neighborhood}
+        CEP: ${clinic.zip}
         Telefone: ${phone}
         Mensagem: ${message || "-"}
         `,
@@ -45,30 +72,36 @@ export async function createAppointmentServices(data) {
         timeZone: "America/Manaus",
       },
 
+      // ✅ aqui você define a cor do evento
+      colorId: eventColor,
       // ✅ AQUI está a correção
       reminders: {
         useDefault: false,
         overrides: [
-          {
-            method: "email",
-            minutes:  REMINDER_MINUTES, // 24 horas
-          },
-          {
-            method: "popup",
-            minutes:  REMINDER_MINUTES, // 24 horas
-          },
+          { method: "email", minutes: REMINDER_MINUTES },
+          { method: "popup", minutes: REMINDER_MINUTES },
         ],
       },
     },
   });
 
-  // 2️⃣ Email para o doutor
-  await sendEmailToDoctor({ name, service, city, date, time });
+  // // 2️⃣ Email para o doutor
+  // await sendEmailToDoctor(data);
 
-  // 3️⃣ Email para o paciente
-  await sendEmailToPatient({ email, service, city, date, time });
+  // // 3️⃣ Email para o paciente (somente se existir email)
+  // if (email && email.trim() !== "") {
+  //   await sendEmailToPatient(data);
+  // }
+
+  const formattedDate = new Date(date).toLocaleDateString("pt-BR");
+
+  let finalMessage = `Agendamento realizado com sucesso para ${name} no endereço ${clinic.street}, ${clinic.number} - ${clinic.neighborhood}, ${clinic.city} - ${clinic.state}, ${clinic.zip}. Serviço: ${service} Data: ${formattedDate} às ${time}.`;
+
+  if (email && email.trim() !== "") {
+    finalMessage += `\nVocê receberá um e-mail com todas as informações do agendamento.`;
+  }
 
   return {
-    message: `Agendamento realizado com sucesso para ${name} no endereço ${city}.\nServiço: ${service}\nData: ${date} às ${time}.\nVocê receberá um e-mail com todas as informações do agendamento.`,
+    message: finalMessage,
   };
 }
