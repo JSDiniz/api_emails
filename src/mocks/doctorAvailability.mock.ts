@@ -39,7 +39,7 @@ export type DoctorAvailability = {
         { date: "2026-01-10", periods: [{ start: "08:00", end: "12:00" }, { start: "13:00", end: "17:00" }] },
   
         // ===== FEVEREIRO 2026 =====
-        { date: "2026-02-03", periods: [{ start: "15:00", end: "17:00" }, { start: "17:30", end: "20:00" }] },
+        { date: "2026-02-03", periods: [{ start: "15:00", end: "17:00" }, { start: "17:30", end: "20:30" }] },
         { date: "2026-02-04", periods: [{ start: "09:00", end: "12:00" }, { start: "14:00", end: "17:00" }, { start: "17:30", end: "20:30" }] },
         { date: "2026-02-05", periods: [{ start: "09:00", end: "12:00" }, { start: "14:00", end: "17:00" }, { start: "17:30", end: "20:30" }] },
         { date: "2026-02-06", periods: [{ start: "09:00", end: "12:00" }, { start: "14:00", end: "17:00" }, { start: "17:30", end: "20:30" }] },
