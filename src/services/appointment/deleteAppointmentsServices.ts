@@ -1,3 +1,4 @@
+import { AppError } from "../../errors/AppError";
 import { calendar } from "../../integrations/google/googleCalendar";
 import { parseGoogleEvent } from "../../utils/parseGoogleEvent";
 import { sendCancellationEmailToDoctor } from "../email/emailService";
@@ -13,7 +14,10 @@ export const deleteAppointmentsServices = async (
   });
 
   if (!event.data) {
-    throw new Error("Evento não encontrado");
+    throw new AppError(
+      "Evento não encontrado.",
+      404
+    );
   }
 
   // 2. Parse dos dados

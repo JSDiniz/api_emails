@@ -1,0 +1,15 @@
+export const serviceDurations: Record<string, number> = {
+    "primeira-consulta": 30,
+    "reavaliacao": 30,
+    "retorno": 30,
+    "aparelho-manutencao": 30,
+    "aparelho-instalacao": 60,
+    "limpeza": 60,
+    "proteses": 60,
+    "restauracao": 60,
+    "tratamento-de-canal": 120,
+    "implante-cirurgia": 120,
+    "implante-avaliacao": 30,
+    "clareamento-1-sessao": 60,
+    "aparelho-ortodontico": 30,
+};

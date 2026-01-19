@@ -1,29 +1,9 @@
 import "dotenv/config";
 import { calendar } from "../../integrations/google/googleCalendar";
 import { sendEmailToDoctor, sendEmailToPatient } from "../email/emailService";
+import { FormData } from "../../types/appointmentTypes"
 
 const REMINDER_MINUTES = 60 * 24;
-
-export type ClinicAddress = {
-  id: number;
-  street: string;
-  number: string;
-  neighborhood: string;
-  city: string;
-  state: string;
-  zip: string;
-};
-
-interface FormData {
-  name: string;
-  email: string;
-  phone?: string;
-  service: string;
-  date: string;
-  time: string;
-  message: string;
-  clinic: ClinicAddress;
-}
 
 // Define cores por cidade
 const cityColors: Record<string, string> = {
@@ -32,21 +12,10 @@ const cityColors: Record<string, string> = {
 };
 
 export async function createAppointmentServices(data: FormData) {
-  const { name, email, phone, clinic, service, date, time, message } = data;
+  const { name, email, phone, clinic, service, date, time, message, startDate, endDate } = data;
 
-  // pega a cor baseado na cidade, se não encontrar usa padrão "4"
+  // Cor do evento baseada na cidade
   const eventColor = clinic?.city ? cityColors[clinic.city] || "2" : "2";
-
-  // 🔹 Start no formato LOCAL
-  const startDateTime = `${date}T${time}:00`;
-
-  // 🔹 End +30 minutos
-  const endDate = new Date(`${date}T${time}:00`);
-  endDate.setMinutes(endDate.getMinutes() + 30);
-
-  const endDateTime = endDate
-    .toLocaleString("sv-SE") // YYYY-MM-DD HH:mm:ss
-    .replace(" ", "T");
 
   // 1️⃣ Criar evento no Google Calendar
   await calendar.events.insert({
@@ -64,11 +33,11 @@ export async function createAppointmentServices(data: FormData) {
         Mensagem: ${message || "-"}
         `,
       start: {
-        dateTime: startDateTime,
+        dateTime: startDate.toISOString(),
         timeZone: "America/Manaus",
       },
       end: {
-        dateTime: endDateTime,
+        dateTime: endDate.toISOString(),
         timeZone: "America/Manaus",
       },
 
@@ -85,13 +54,13 @@ export async function createAppointmentServices(data: FormData) {
     },
   });
 
-  // 2️⃣ Email para o doutor
-  await sendEmailToDoctor(data);
+  // // 2️⃣ Email para o doutor
+  // await sendEmailToDoctor(data);
 
-  // 3️⃣ Email para o paciente (somente se existir email)
-  if (email && email.trim() !== "") {
-    await sendEmailToPatient(data);
-  }
+  // // 3️⃣ Email para o paciente (somente se existir email)
+  // if (email && email.trim() !== "") {
+  //   await sendEmailToPatient(data);
+  // }
 
   const formattedDate = new Date(date).toLocaleDateString("pt-BR");
 
