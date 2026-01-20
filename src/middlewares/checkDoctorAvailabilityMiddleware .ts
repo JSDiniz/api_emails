@@ -24,19 +24,19 @@ const checkDoctorAvailabilityMiddleware = async (req: Request, res: Response, ne
     const endDate = new Date(startDate);
     endDate.setMinutes(endDate.getMinutes() + durationInMinutes);
 
-    const isAvailableInDoctorAgenda = isWithinDoctorAvailability({
-        city: clinic.city,
-        date,
-        startDate,
-        endDate,
-    });
+    // const isAvailableInDoctorAgenda = isWithinDoctorAvailability({
+    //     city: clinic.city,
+    //     date,
+    //     startDate,
+    //     endDate,
+    // });
 
-    if (!isAvailableInDoctorAgenda) {
-        throw new AppError(
-            `Horário indisponível. O serviço selecionado possui duração de ${formattedDuration} e ultrapassa o horário disponível da doutora. Por favor, selecione outra data ou horário disponível.`,
-            409
-        );
-    }
+    // if (!isAvailableInDoctorAgenda) {
+    //     throw new AppError(
+    //         `Horário indisponível. O serviço selecionado possui duração de ${formattedDuration} e ultrapassa o horário disponível da doutora. Por favor, selecione outra data ou horário disponível.`,
+    //         409
+    //     );
+    // }
 
     // 🔍 Verifica conflito no Google Calendar
     const events = await calendar.events.list({
