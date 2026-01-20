@@ -18,8 +18,8 @@ const checkDoctorAvailabilityMiddleware = async (req: Request, res: Response, ne
     const formattedDuration = formatDuration(durationInMinutes);
 
     // 🔹 Datas como Date (regra de ouro)
-    const startDate = new Date(`${date}T${time}:00`);
-    // const startDate = parseDateManaus(date, time);
+    // const startDate = new Date(`${date}T${time}:00`);
+    const startDate = parseDateManaus(date, time);
 
     const endDate = new Date(startDate);
     endDate.setMinutes(endDate.getMinutes() + durationInMinutes);
