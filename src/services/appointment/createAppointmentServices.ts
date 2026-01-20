@@ -54,13 +54,13 @@ export async function createAppointmentServices(data: FormData) {
     },
   });
 
-  // // 2️⃣ Email para o doutor
-  // await sendEmailToDoctor(data);
+  // 2️⃣ Email para o doutor
+  await sendEmailToDoctor(data);
 
-  // // 3️⃣ Email para o paciente (somente se existir email)
-  // if (email && email.trim() !== "") {
-  //   await sendEmailToPatient(data);
-  // }
+  // 3️⃣ Email para o paciente (somente se existir email)
+  if (email && email.trim() !== "") {
+    await sendEmailToPatient(data);
+  }
 
   const formattedDate = new Date(date).toLocaleDateString("pt-BR");
 

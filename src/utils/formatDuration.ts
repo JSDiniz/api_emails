@@ -7,3 +7,11 @@ export function formatDuration(minutes: number) {
 
     return `${hours}h ${rest}min`;
 }
+
+export function parseDateManaus(date: string, time: string) {
+    const [hours, minutes] = time.split(':').map(Number);
+    const d = new Date(`${date}T00:00:00-04:00`);
+    d.setHours(hours);
+    d.setMinutes(minutes);
+    return d;
+}

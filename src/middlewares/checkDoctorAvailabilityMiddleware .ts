@@ -3,7 +3,7 @@ import { isWithinDoctorAvailability } from "../utils/availability";
 import { calendar } from "../integrations/google/googleCalendar";
 import { serviceDurations } from "../mocks/serviceDurations.mock";
 import { AppError } from "../errors/AppError";
-import { formatDuration } from "../utils/formatDuration";
+import { formatDuration, parseDateManaus } from "../utils/formatDuration";
 
 const checkDoctorAvailabilityMiddleware = async (req: Request, res: Response, next: NextFunction) => {
 
@@ -18,7 +18,8 @@ const checkDoctorAvailabilityMiddleware = async (req: Request, res: Response, ne
     const formattedDuration = formatDuration(durationInMinutes);
 
     // 🔹 Datas como Date (regra de ouro)
-    const startDate = new Date(`${date}T${time}:00`);
+    // const startDate = new Date(`${date}T${time}:00`);
+    const startDate = parseDateManaus(date, time);
 
     const endDate = new Date(startDate);
     endDate.setMinutes(endDate.getMinutes() + durationInMinutes);
