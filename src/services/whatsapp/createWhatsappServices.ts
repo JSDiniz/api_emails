@@ -8,11 +8,16 @@ export interface FormData {
 
 export async function createWhatsappServices({ phone, message }: FormData) {
 
+    const normalizedPhone = phone.replace(/\D/g, "");
+    const finalPhone = normalizedPhone.startsWith("55")
+        ? normalizedPhone
+        : `55${normalizedPhone}`;
+
     try {
         const response = await axios.post(
             `${process.env.EVOLUTION_API_URL}/message/sendText/${process.env.EVOLUTION_INSTANCE}`,
             {
-                number: phone, // ex: 5511999999999
+                number: finalPhone, // ex: 5511999999999
                 text: message,
             },
             {
