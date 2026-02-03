@@ -1,0 +1,37 @@
+import "dotenv/config";
+import axios from "axios";
+
+export interface FormData {
+    phone: string;
+    message: string;
+}
+
+export async function createWhatsappServices({ phone, message }: FormData) {
+
+    try {
+        const response = await axios.post(
+            `${process.env.EVOLUTION_API_URL}/message/sendText/${process.env.EVOLUTION_INSTANCE}`,
+            {
+                number: phone, // ex: 5511999999999
+                text: message,
+            },
+            {
+                headers: {
+                    apikey: process.env.EVOLUTION_API_KEY,
+                    "Content-Type": "application/json",
+                },
+            }
+        );
+
+        return {
+            success: true,
+            data: response.data,
+        };
+
+    } catch (error: any) {
+        return {
+            success: false,
+            error: error?.response?.data || error.message,
+        };
+    }
+}

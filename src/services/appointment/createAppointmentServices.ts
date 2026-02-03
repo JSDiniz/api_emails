@@ -2,6 +2,9 @@ import "dotenv/config";
 import { calendar } from "../../integrations/google/googleCalendar";
 import { sendEmailToDoctor, sendEmailToPatient } from "../email/emailService";
 import { FormData } from "../../types/appointmentTypes"
+import { createWhatsappServices } from "../whatsapp/createWhatsappServices";
+
+const SEND_WHATSAPP = process.env.SEND_WHATSAPP === "true";
 
 const REMINDER_MINUTES = 60 * 24;
 
@@ -53,6 +56,30 @@ export async function createAppointmentServices(data: FormData) {
       },
     },
   });
+
+  const whatsappMessage = `Agendamento confirmado ✅
+
+  📍 Local:
+  ${clinic.street}, ${clinic.number}
+  ${clinic.neighborhood}
+  ${clinic.city} - ${clinic.state}
+  CEP: ${clinic.zip}
+  
+  🦷 Serviço: ${service}
+  📅 Data: ${date}
+  ⏰ Horário: ${time}
+  `;
+
+  if (SEND_WHATSAPP) {
+    try {
+      await createWhatsappServices({
+        phone,
+        message: whatsappMessage,
+      });
+    } catch (err) {
+      console.error("Erro ao enviar WhatsApp:", err);
+    }
+  }
 
   // 2️⃣ Email para o doutor
   await sendEmailToDoctor(data);
