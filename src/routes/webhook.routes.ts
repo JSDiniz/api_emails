@@ -21,6 +21,10 @@ webhookRoutes.get("/", (req: Request, res: Response) => {
  * 🔹 RECEBIMENTO DE EVENTOS (POST)
  */
 webhookRoutes.post("/", (req: Request, res: Response) => {
+
+    console.log("🔥 PAYLOAD COMPLETO");
+    console.log(JSON.stringify(req.body, null, 2));
+
     const entry = req.body.entry?.[0];
     const changes = entry?.changes?.[0];
     const value = changes?.value;
