@@ -66,6 +66,8 @@ export async function createAppointmentServices(data: FormData) {
 
   const formattedDate = new Date(date).toLocaleDateString("pt-BR");
 
+  console.log("formattedDate -> ", formattedDate)
+
   const whatsappMessage = `Agendamento confirmado ✅
 
   📍 Local:
