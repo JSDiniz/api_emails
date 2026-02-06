@@ -18,17 +18,16 @@ app.use("/whatsapp", whatsappRoutes)
 app.use(handleError);
 
 // ================= CRON JOB =================
-// Executa o sendPresenceServices automaticamente 3 vezes ao dia: 08:01, 12:00 e 17:00
-const presenceTimes = ["12:03", "16:00", "21:00"]; // horários ajustados para UTC
+// Executa o sendPresenceServices automaticamente 3 vezes ao dia: 09:00, 12:00 e 17:00 (Manaus / UTC-4)
+const presenceTimes = ["12", "17", "21"]; // horários ajustados para UTC
 
-presenceTimes.forEach(time => {
-    const [hour, minute] = time.split(":").map(Number);
-    cron.schedule(`${minute} ${hour} * * *`, async () => {
+presenceTimes.forEach(hour => {
+    cron.schedule(`0 ${hour} * * *`, async () => {
         try {
-            console.log(`🔔 Rodando sendPresenceServices automaticamente às ${time}...`);
+            console.log(`🔔 Rodando sendPresenceServices automaticamente às ${hour}:00...`);
             await sendPresenceServices();
         } catch (err) {
-            console.error(`❌ Erro no cron do horário ${time}:`, err);
+            console.error(`❌ Erro no cron do horário ${hour}:00`, err);
         }
     });
 });
