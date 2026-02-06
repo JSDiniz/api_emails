@@ -15,7 +15,15 @@
   "crons": [
     {
       "path": "/api/cron/presence",
-      "schedule": "46 17 * * *"
+      "schedule": "0 12 * * *"
+    },
+    {
+      "path": "/api/cron/presence",
+      "schedule": "55 17 * * *"
+    },
+    {
+      "path": "/api/cron/presence",
+      "schedule": "0 21 * * *"
     }
   ],
   "env": {
