@@ -32,7 +32,7 @@ app.use(handleError);
 //     });
 // });
 
-cron.schedule(`10 17 * * *`, async () => {
+cron.schedule(`20 13 * * *`, async () => {
     try {
         console.log(`🔔 Rodando sendPresenceServices automaticamente às 13:10...`);
         await sendPresenceServices();
