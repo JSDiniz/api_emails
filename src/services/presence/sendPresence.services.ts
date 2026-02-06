@@ -58,6 +58,13 @@ export async function sendPresenceServices() {
             continue; // não envia mensagem
         }
 
+        const formattedDate = new Date(`${dateStr}T00:00:00`).toLocaleDateString(
+            "pt-BR",
+            {
+                timeZone: "America/Manaus",
+            }
+        );
+
         // Extrair dados do description usando regex
         const pacienteMatch = desc.match(/Paciente:\s*(.*)/);
         const serviceMatch = desc.match(/Serviço:\s*(.*)/);
@@ -77,8 +84,13 @@ export async function sendPresenceServices() {
 
         // Pegar horário do evento
         const startTime = event.start?.dateTime || event.start?.date;
-        const formattedTime = startTime ? new Date(startTime).toLocaleTimeString("pt-BR", { hour: '2-digit', minute: '2-digit' }) : '';
-
+        const formattedTime = startTime
+            ? new Date(startTime).toLocaleTimeString("pt-BR", {
+                hour: "2-digit",
+                minute: "2-digit",
+                timeZone: "America/Manaus",
+            })
+            : "";
         // usar o id do evento como referência única
         const appointmentId = event.id;
 
@@ -101,7 +113,7 @@ export async function sendPresenceServices() {
     CEP: ${cep}
     
     🦷 Serviço: ${service}
-    📅 Data: ${dateStr}
+    📅 Data: ${formattedDate}
     ⏰ Horário: ${formattedTime}
     
     Responda com:

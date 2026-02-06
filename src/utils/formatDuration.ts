@@ -21,3 +21,5 @@ export function parseDateManaus(date: string, time: string) {
     ));
     return d;
 }
+
+

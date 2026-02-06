@@ -19,7 +19,7 @@
     },
     {
       "path": "/api/cron/presence",
-      "schedule": "55 17 * * *"
+      "schedule": "06 18 * * *"
     },
     {
       "path": "/api/cron/presence",
