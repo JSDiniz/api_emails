@@ -64,6 +64,8 @@ export async function createAppointmentServices(data: FormData) {
     },
   });
 
+  const formattedDate = new Date(date).toLocaleDateString("pt-BR");
+
   const whatsappMessage = `Agendamento confirmado ✅
 
   📍 Local:
@@ -73,7 +75,7 @@ export async function createAppointmentServices(data: FormData) {
   CEP: ${clinic.zip}
   
   🦷 Serviço: ${service}
-  📅 Data: ${date}
+  📅 Data: ${formattedDate}
   ⏰ Horário: ${time}
   `;
 
@@ -95,8 +97,6 @@ export async function createAppointmentServices(data: FormData) {
   if (email && email.trim() !== "") {
     await sendEmailToPatient(data);
   }
-
-  const formattedDate = new Date(date).toLocaleDateString("pt-BR");
 
   let finalMessage = `Agendamento realizado com sucesso para ${name} no endereço ${clinic.street}, ${clinic.number} - ${clinic.neighborhood}, ${clinic.city} - ${clinic.state}, ${clinic.zip}. Serviço: ${service} Data: ${formattedDate} às ${time}.`;
 

@@ -58,12 +58,7 @@ export async function sendPresenceServices() {
             continue; // não envia mensagem
         }
 
-        const formattedDate = new Date(`${dateStr}T00:00:00`).toLocaleDateString(
-            "pt-BR",
-            {
-                timeZone: "America/Manaus",
-            }
-        );
+        const formattedDate = new Date(dateStr).toLocaleDateString("pt-BR");
 
         // Extrair dados do description usando regex
         const pacienteMatch = desc.match(/Paciente:\s*(.*)/);
