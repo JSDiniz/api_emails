@@ -1,6 +1,6 @@
 import { calendar } from "../../integrations/google/googleCalendar";
 
-export const getAppointmentsServices = async (calendarId) => {
+export const getAppointmentsServices = async (calendarId: string) => {
   const { data } = await calendar.events.list({
     calendarId,
     timeMin: new Date().toISOString(),

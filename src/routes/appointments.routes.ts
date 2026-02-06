@@ -1,13 +1,13 @@
 import { Router } from "express";
-import getAppointmentsController from "../controllers/appointment/getAppointmentsController";
-import createAppointmentController from "../controllers/appointment/createAppointmentController";
-import deleteAppointmentsController from "../controllers/appointment/deleteAppointmentsController";
+import getAppointmentsController from "../controllers/appointment/getAppointments.controllers";
+import createAppointmentController from "../controllers/appointment/createAppointment.controllers";
+import deleteAppointmentsController from "../controllers/appointment/deleteAppointments.controllers";
 import checkDoctorAvailabilityMiddleware from "../middlewares/checkDoctorAvailabilityMiddleware ";
 
 const appointmentsRoutes = Router();
 
 appointmentsRoutes.post("/", checkDoctorAvailabilityMiddleware, createAppointmentController);
 appointmentsRoutes.get("/", getAppointmentsController);
-appointmentsRoutes.delete("/:calendarId/:eventId", deleteAppointmentsController);
+appointmentsRoutes.delete("/:eventId", deleteAppointmentsController);
 
 export default appointmentsRoutes;

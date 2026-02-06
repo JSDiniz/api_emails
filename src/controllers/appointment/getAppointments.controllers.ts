@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { getAppointmentsServices } from "../../services/appointment/getAppointmentsServices";
+import { getAppointmentsServices } from "../../services/appointment/getAppointments.services";
 
 const getAppointmentsController = async (req: Request, res: Response) => {
   const calendarId = (req.query.calendarId as string) || "primary";

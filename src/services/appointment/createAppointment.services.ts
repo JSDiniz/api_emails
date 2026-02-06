@@ -1,8 +1,8 @@
 import "dotenv/config";
 import { calendar } from "../../integrations/google/googleCalendar";
-import { sendEmailToDoctor, sendEmailToPatient } from "../email/emailService";
+import { sendEmailToDoctor, sendEmailToPatient } from "../email/email.services";
 import { FormData } from "../../types/appointmentTypes"
-import { createWhatsappServices } from "../whatsapp/createWhatsappServices";
+import { createWhatsappServices } from "../whatsapp/createWhatsapp.services";
 
 const SEND_WHATSAPP = process.env.SEND_WHATSAPP === "true";
 
@@ -26,6 +26,7 @@ export async function createAppointmentServices(data: FormData) {
     requestBody: {
       summary: `${name} - ${service}`,
       description: `
+        Status: Agendado
         Paciente: ${name}
         Serviço: ${service}
         Email: ${email}
@@ -53,6 +54,12 @@ export async function createAppointmentServices(data: FormData) {
           { method: "email", minutes: REMINDER_MINUTES },
           { method: "popup", minutes: REMINDER_MINUTES },
         ],
+      },
+      extendedProperties: {
+        private: {
+          status: "agendado",  // aqui você define o status inicial
+          appointmentId: `${phone}123`,
+        },
       },
     },
   });

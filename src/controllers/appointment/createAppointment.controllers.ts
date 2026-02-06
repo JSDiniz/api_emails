@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { createAppointmentServices } from "../../services/appointment/createAppointmentServices";
+import { createAppointmentServices } from "../../services/appointment/createAppointment.services";
 
 const createAppointmentController = async (req: Request, res: Response) => {
   const data = req.body;
