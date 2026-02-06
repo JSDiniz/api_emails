@@ -9,6 +9,6 @@ const appointmentsRoutes = Router();
 
 appointmentsRoutes.post("/", checkDoctorAvailabilityMiddleware, createAppointmentController);
 appointmentsRoutes.get("/", getAppointmentsController);
-appointmentsRoutes.delete("/:eventId", deleteAppointmentsController);
+appointmentsRoutes.delete("/:idEvent", deleteAppointmentsController);
 
 export default appointmentsRoutes;
