@@ -18,15 +18,15 @@
   "crons": [
     {
       "path": "/appointments/confirm-scheduled",
-      "schedule": "40 20 * * *"
+      "schedule": "00 12 * * *"
     },
     {
       "path": "/appointments/confirm-scheduled",
-      "schedule": "45 20 * * *"
+      "schedule": "00 17 * * *"
     },
     {
       "path": "/appointments/confirm-scheduled",
-      "schedule": "50 20 * * *"
+      "schedule": "00 21 * * *"
     }
   ]
 }

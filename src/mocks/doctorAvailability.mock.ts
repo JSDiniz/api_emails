@@ -22,7 +22,8 @@ export const doctorAvailabilityMock: DoctorAvailability[] = [
       { date: "2026-01-31", periods: [{ start: "13:00", end: "17:00" }] },
 
       // ===== FEVEREIRO 2026 =====
-      { date: "2026-02-17", periods: [{ start: "08:00", end: "12:00" }] },
+      { date: "2026-02-10", periods: [{ start: "08:00", end: "12:00" }] },
+      // { date: "2026-02-17", periods: [{ start: "08:00", end: "12:00" }] },
       { date: "2026-02-21", periods: [{ start: "13:00", end: "17:00" }] },
       { date: "2026-02-24", periods: [{ start: "08:00", end: "12:00" }] },
       { date: "2026-02-28", periods: [{ start: "13:00", end: "17:00" }] },

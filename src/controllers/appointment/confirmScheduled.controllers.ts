@@ -8,9 +8,10 @@ const confirmScheduledController = async (req: Request, res: Response) => {
     }
     try {
 
+        console.log("[CRON] send Presence Services executada!");
+
         await sendPresenceServices()
 
-        console.log("[CRON] send Presence Services executada!");
 
         res.status(200).send("Função executada!");
     } catch (err) {
