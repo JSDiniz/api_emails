@@ -14,5 +14,15 @@
   ],
   "env": {
     "NODE_ENV": "production"
-  }
+  },
+  "cronJobs": [
+    {
+      "path": "/api/cron",
+      "schedule": "35 19 * * *"
+    },
+    {
+      "path": "/api/cron",
+      "schedule": "40 19 * * *"
+    }
+  ]
 }
