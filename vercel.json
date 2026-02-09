@@ -17,16 +17,16 @@
   },
   "crons": [
     {
-      "path": "/api/cron",
-      "schedule": "55 19 * * *"
+      "path": "/appointments/confirm-scheduled",
+      "schedule": "40 20 * * *"
     },
     {
-      "path": "/api/cron",
-      "schedule": "0 20 * * *"
+      "path": "/appointments/confirm-scheduled",
+      "schedule": "45 20 * * *"
     },
     {
-      "path": "/api/cron",
-      "schedule": "05 20 * * *"
+      "path": "/appointments/confirm-scheduled",
+      "schedule": "50 20 * * *"
     }
   ]
 }

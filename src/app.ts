@@ -1,22 +1,19 @@
 import express, { Application } from "express";
 import cors from "cors";
-import cron from "node-cron";
+
+import whatsappRoutes from "./routes/whatsapp.routes";
 import appointmentsRoutes from "./routes/appointments.routes";
 import availabilityRoutes from "./routes/availability.routes";
-import handleError from "./errors/handleError";
-import whatsappRoutes from "./routes/whatsapp.routes";
-import { sendPresenceServices } from "./services/presence/sendPresence.services";
-import cronppRoutes from "./routes/cron.routes";
 
+import handleError from "./errors/handleError";
 
 const app: Application = express();
 app.use(cors());
 app.use(express.json());
 
+app.use("/whatsapp", whatsappRoutes)
 app.use("/appointments", appointmentsRoutes);
 app.use("/availability", availabilityRoutes);
-app.use("/whatsapp", whatsappRoutes)
-app.use("/api", cronppRoutes)
 
 app.use(handleError);
 
