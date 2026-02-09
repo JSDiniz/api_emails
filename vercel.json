@@ -12,20 +12,6 @@
       "dest": "api/index.ts"
     }
   ],
-  "crons": [
-    {
-      "path": "/api/cron/presence",
-      "schedule": "0 12 * * *"
-    },
-    {
-      "path": "/api/cron/presence",
-      "schedule": "0 17 * * *"
-    },
-    {
-      "path": "/api/cron/presence",
-      "schedule": "0 21 * * *"
-    }
-  ],
   "env": {
     "NODE_ENV": "production"
   }
