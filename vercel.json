@@ -26,7 +26,7 @@
     },
     {
       "path": "/api/cron",
-      "schedule": "00 20 * * *"
+      "schedule": "0 20 * * *"
     }
   ]
 }
