@@ -1,5 +1,3 @@
-// src/modules/availability/availability.controller.ts
-
 import { Request, Response } from "express";
 import { getAllAvailability } from "../../services/availability/availability.services";
 

@@ -6,12 +6,22 @@ import appointmentsRoutes from "./routes/appointments.routes";
 import availabilityRoutes from "./routes/availability.routes";
 
 import handleError from "./errors/handleError";
+import whatsappWebhookRoutes from "./routes/whatsappWebhook.routes";
 
 const app: Application = express();
 app.use(cors());
-app.use(express.json());
+
+app.use(
+    express.json({
+        verify: (req: any, res, buf) => {
+            req.rawBody = buf;
+        }
+    })
+);
 
 app.use("/whatsapp", whatsappRoutes)
+app.use("/webhooks/whatsapp", whatsappWebhookRoutes);
+
 app.use("/appointments", appointmentsRoutes);
 app.use("/availability", availabilityRoutes);
 
