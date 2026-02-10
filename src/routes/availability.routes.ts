@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { availabilityController } from "../controllers/availability/availability.controllers";
+import { availabilityController } from "../controllers/availability/availability.controller";
 
 const availabilityRoutes = Router();
 

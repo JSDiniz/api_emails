@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { evolutionWebhookController } from "../controllers/evolution/evolutionWebhook.controllers";
+import evolutionWebhookController from "../controllers/evolution/evolutionWebhook.controller";
 
 const evolutionWebhookRoutes = Router();
 

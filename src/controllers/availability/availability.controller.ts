@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { getAllAvailabilityService } from "../../services/availability/availability.service";
+import getAllAvailabilityService from "../../services/availability/availability.service";
 
 export function availabilityController(req: Request, res: Response) {
   const data = getAllAvailabilityService();

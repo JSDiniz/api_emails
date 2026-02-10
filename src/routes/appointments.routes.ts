@@ -1,9 +1,9 @@
 import { Router } from "express";
-import getAppointmentsController from "../controllers/appointment/getAppointments.controllers";
-import createAppointmentController from "../controllers/appointment/createAppointment.controllers";
-import deleteAppointmentsController from "../controllers/appointment/deleteAppointments.controllers";
+import getAppointmentsController from "../controllers/appointment/getAppointments.controller";
+import confirmScheduledController from "../controllers/appointment/confirmScheduled.controller";
 import checkDoctorAvailabilityMiddleware from "../middlewares/checkDoctorAvailabilityMiddleware";
-import confirmScheduledController from "../controllers/appointment/confirmScheduled.controllers";
+import createAppointmentController from "../controllers/appointment/createAppointment.controller";
+import deleteAppointmentsController from "../controllers/appointment/deleteAppointments.controller";
 
 
 const appointmentsRoutes = Router();

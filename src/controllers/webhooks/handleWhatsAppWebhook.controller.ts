@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 
-export function verifyWhatsAppWebhookController(req: Request, res: Response) {
+const verifyWhatsAppWebhookController = (req: Request, res: Response) => {
     const mode = req.query["hub.mode"];
     const token = req.query["hub.verify_token"];
     const challenge = req.query["hub.challenge"];
@@ -14,3 +14,5 @@ export function verifyWhatsAppWebhookController(req: Request, res: Response) {
     return res.sendStatus(403);
 
 }
+
+export default verifyWhatsAppWebhookController

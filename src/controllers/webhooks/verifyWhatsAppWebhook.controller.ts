@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import crypto from "crypto";
 import sendMessageService from "../../services/whatsapp/sendMessage.service";
 
-export function handleWhatsAppWebhookController(req: Request, res: Response) {
+const handleWhatsAppWebhookController = (req: Request, res: Response) => {
 
     const signature = req.headers["x-hub-signature-256"] as string;
 
@@ -63,6 +63,6 @@ export function handleWhatsAppWebhookController(req: Request, res: Response) {
     }
 
     return res.sendStatus(200);
-
-
 }
+
+export default handleWhatsAppWebhookController

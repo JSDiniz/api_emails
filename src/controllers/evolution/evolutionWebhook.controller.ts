@@ -6,7 +6,7 @@ import deleteAppointmentService from "../../services/appointment/deleteAppointme
 import confirmPresenceService from "../../services/presence/confirmPresence.service";
 
 
-export async function evolutionWebhookController(req: Request, res: Response) {
+const evolutionWebhookController = async (req: Request, res: Response) => {
 
     const message =
         req.body?.data?.message?.conversation ||
@@ -53,3 +53,4 @@ export async function evolutionWebhookController(req: Request, res: Response) {
     return res.sendStatus(200);
 }
 
+export default evolutionWebhookController
