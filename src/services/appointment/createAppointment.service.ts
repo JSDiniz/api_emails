@@ -3,6 +3,7 @@ import { FormData } from "../../types/appointmentTypes"
 import { calendar } from "../../integrations/google/googleCalendar";
 import createWhatsappService from "../whatsapp/createWhatsapp.service";
 import { sendEmailToDoctor, sendEmailToPatient } from "../email/email.services";
+import sendAppointmentConfirmationService from "../whatsapp/sendAppointmentConfirmation.service";
 
 const SEND_WHATSAPP = process.env.SEND_WHATSAPP === "true";
 
@@ -64,7 +65,10 @@ const createAppointmentService = async (data: FormData) => {
     },
   });
 
-  const formattedDate = new Date(date).toLocaleDateString("pt-BR");
+  const formattedDate = new Date(`${date}T12:00:00`).toLocaleDateString(
+    "pt-BR",
+    { timeZone: "America/Manaus" }
+  );
 
   const whatsappMessage = `Agendamento confirmado ✅
 
@@ -81,10 +85,15 @@ const createAppointmentService = async (data: FormData) => {
 
   if (SEND_WHATSAPP) {
     try {
+      //Evolution
       await createWhatsappService({
         phone,
         message: whatsappMessage,
       });
+
+      //WhatsApp Oficial
+      // const local = `${clinic.street}, ${clinic.number}, ${clinic.neighborhood}, ${clinic.city} - ${clinic.state}, ${clinic.zip}`
+      // await sendAppointmentConfirmationService(phone, name, formattedDate, time, local)
     } catch (err) {
       console.error("Erro ao enviar WhatsApp:", err);
     }

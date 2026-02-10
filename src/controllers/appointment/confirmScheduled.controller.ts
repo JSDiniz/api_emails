@@ -3,15 +3,16 @@ import sendPresenceService from "../../services/presence/sendPresence.service";
 
 
 const confirmScheduledController = async (req: Request, res: Response) => {
+
     if (!req.headers["x-vercel-cron"]) {
         return res.status(401).send("Unauthorized");
     }
+
     try {
 
         console.log("[CRON] send Presence Services executada!");
 
         await sendPresenceService()
-
 
         res.status(200).send("Função executada!");
     } catch (err) {

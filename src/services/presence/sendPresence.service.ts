@@ -4,8 +4,10 @@ import sendConfirmedPresenceService from "./sendConfirmedPresence.service";
 import { calendar } from "../../integrations/google/googleCalendar";
 import { presenceStore } from "../../store/presence.store";
 import { sleep } from "../../utils/async";
+import sendConfirmationSchedulingService from "../whatsapp/sendConfirmationScheduling.service";
 
 const calendarId = process.env.GOOGLE_CALENDAR_ID;
+const doctorName = process.env.DOCTOR_NAME;
 
 const sendPresenceService = async () => {
     const today = new Date();
@@ -49,7 +51,9 @@ const sendPresenceService = async () => {
         const desc = event.description;
         if (!desc) continue;
 
-        // ✅ Verificar status primeiro
+        console.log("desc -> ", desc)
+
+        //Verificar status primeiro
         const statusMatch = desc.match(/Status:\s*(.*)/);
         const status = statusMatch ? statusMatch[1].trim() : "Agendado";
 
@@ -58,7 +62,10 @@ const sendPresenceService = async () => {
             continue; // não envia mensagem
         }
 
-        const formattedDate = new Date(dateStr).toLocaleDateString("pt-BR");
+        const formattedDate = new Date(`${dateStr}T12:00:00`).toLocaleDateString(
+            "pt-BR",
+            { timeZone: "America/Manaus" }
+        );
 
         // Extrair dados do description usando regex
         const pacienteMatch = desc.match(/Paciente:\s*(.*)/);
@@ -90,15 +97,29 @@ const sendPresenceService = async () => {
         const appointmentId = event.id;
 
         const normalizedPhone = phone.replace(/\D/g, "");
-        const finalPhone = normalizedPhone.startsWith("55")
-            ? normalizedPhone
-            : `55${normalizedPhone}`;
+        const finalPhone = normalizedPhone.startsWith("55") ? normalizedPhone : `55${normalizedPhone}`;
 
-        // Salvar no presenceStore
-        presenceStore.push({
-            id: appointmentId,
-            phone: finalPhone,
-        });
+        // Fazer a verificação no presenceStore para verificar se o phone e o id já existem. Dessa forma, evitamos adicionar o mesmo usuário duas vezes.
+        const exists = presenceStore.some(
+            p => p.phone === finalPhone && p.id === appointmentId
+        );
+
+        if (!exists) {
+            // Salvar no presenceStore
+            // presenceStore.push({
+            //     id: appointmentId,
+            //     phone: finalPhone,
+            //     date: formattedDate,
+            //     time: formattedTime,
+            //     status: "pending"
+            // });
+
+            presenceStore.push({
+                id: appointmentId,
+                phone: finalPhone,
+            });
+        }
+
         // Montar mensagem
         const whatsappMessage = `Confirmação de presença 🦷
     
@@ -120,6 +141,11 @@ const sendPresenceService = async () => {
             phone,
             text: whatsappMessage,
         });
+
+
+        // const local = `${street}, ${city}, ${cep}`
+
+        // await sendConfirmationSchedulingService(normalizedPhone, paciente, doctorName, formattedDate, formattedTime, local)
 
         sentCount++; // incrementa apenas quando envia mensagem
         await sleep(2000);
