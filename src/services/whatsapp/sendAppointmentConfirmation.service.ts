@@ -1,10 +1,9 @@
 import "dotenv/config";
 import whatsappApi from "../../integrations/whatsapp/whatsappApi";
 
-export const sendConfirmationScheduling = async (
+const sendAppointmentConfirmationService = async (
     to: string,
     patientName: string,
-    doctorName: string,
     date: string,
     time: string,
     address: string
@@ -15,35 +14,18 @@ export const sendConfirmationScheduling = async (
             to,
             type: "template",
             template: {
-                name: `${process.env.WHATSAPP_REMINDER_CONFIRMATION_TEMPLATE}`,
+                name: `${process.env.WHATSAPP_CONFIRMATION_TEMPLATE}`,
                 language: { code: "pt_BR" },
                 components: [
                     {
                         type: "body",
                         parameters: [
                             { type: "text", text: patientName },
-                            { type: "text", text: doctorName },
                             { type: "text", text: date },
                             { type: "text", text: time },
                             { type: "text", text: address }
                         ]
                     },
-                    {
-                        type: "button",
-                        sub_type: "quick_reply",
-                        index: "0",
-                        parameters: [
-                            { type: "payload", payload: "confirm_yes" } // botão "Sim, irei comparecer"
-                        ]
-                    },
-                    {
-                        type: "button",
-                        sub_type: "quick_reply",
-                        index: "1",
-                        parameters: [
-                            { type: "payload", payload: "confirm_no" } // botão "Não poderei comparecer"
-                        ]
-                    }
                 ]
             }
         });
@@ -53,3 +35,5 @@ export const sendConfirmationScheduling = async (
         console.error("❌ Erro ao enviar mensagem:", error);
     }
 };
+
+export default sendAppointmentConfirmationService

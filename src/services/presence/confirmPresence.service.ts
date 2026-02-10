@@ -1,8 +1,8 @@
 import { calendar } from "../../integrations/google/googleCalendar";
 import { presenceStore } from "../../store/presence.store";
-import { sendConfirmedPresence } from "./sendConfirmedPresence.services";
+import sendConfirmedPresenceService from "./sendConfirmedPresence.service";
 
-export async function confirmPresenceService(phone: string) {
+const confirmPresenceService = async (phone: string) => {
     // encontra a presença no store
     const presence = presenceStore.find(item => item.phone === phone);
     if (!presence) return false;
@@ -27,7 +27,7 @@ export async function confirmPresenceService(phone: string) {
     });
 
     // 2️⃣ Envia mensagem WhatsApp
-    await sendConfirmedPresence({
+    await sendConfirmedPresenceService({
         phone,
         text: "✅ Presença confirmada. Obrigado!",
     });
@@ -38,3 +38,6 @@ export async function confirmPresenceService(phone: string) {
 
     return true;
 }
+
+
+export default confirmPresenceService

@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
-import { createAppointmentServices } from "../../services/appointment/createAppointment.services";
+import createAppointmentService from "../../services/appointment/createAppointment.service";
 
 const createAppointmentController = async (req: Request, res: Response) => {
   const data = req.body;
-  const Appointment = await createAppointmentServices(data);
+  const Appointment = await createAppointmentService(data);
   return res.status(201).json(Appointment);
 };
 

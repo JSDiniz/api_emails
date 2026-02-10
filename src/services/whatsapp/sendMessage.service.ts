@@ -1,6 +1,6 @@
 import whatsappApi from "../../integrations/whatsapp/whatsappApi";
 
-export const sendMessage = async (to: string, message: string) => {
+const sendMessageService = async (to: string, message: string) => {
     try {
         await whatsappApi.post("/messages", {
             messaging_product: "whatsapp",
@@ -17,3 +17,5 @@ export const sendMessage = async (to: string, message: string) => {
         console.error("❌ Erro ao enviar mensagem:", error);
     }
 };
+
+export default sendMessageService

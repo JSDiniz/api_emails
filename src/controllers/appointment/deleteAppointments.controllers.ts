@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { deleteAppointmentServices } from "../../services/appointment/deleteAppointment.services";
+import deleteAppointmentService from "../../services/appointment/deleteAppointment.service";
 
 const deleteAppointmentsController = async (req: Request, res: Response) => {
   const { idEvent } = req.params;
@@ -10,7 +10,7 @@ const deleteAppointmentsController = async (req: Request, res: Response) => {
     });
   }
 
-  const events = await deleteAppointmentServices(idEvent);
+  const events = await deleteAppointmentService(idEvent);
   return res.status(200).json(events);
 };
 

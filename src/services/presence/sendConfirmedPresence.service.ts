@@ -6,10 +6,10 @@ interface SendWhatsappTextProps {
     text: string;
 }
 
-export async function sendConfirmedPresence({
+const sendConfirmedPresenceService = async ({
     phone,
     text,
-}: SendWhatsappTextProps) {
+}: SendWhatsappTextProps) => {
 
     const normalizedPhone = phone.replace(/\D/g, "");
     const finalPhone = normalizedPhone.startsWith("55")
@@ -30,3 +30,6 @@ export async function sendConfirmedPresence({
         }
     );
 }
+
+
+export default sendConfirmedPresenceService

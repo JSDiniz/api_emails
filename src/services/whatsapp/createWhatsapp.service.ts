@@ -6,7 +6,7 @@ export interface FormData {
     message: string;
 }
 
-export async function createWhatsappServices({ phone, message }: FormData) {
+const createWhatsappService = async ({ phone, message }: FormData) => {
 
     const normalizedPhone = phone.replace(/\D/g, "");
     const finalPhone = normalizedPhone.startsWith("55")
@@ -40,3 +40,5 @@ export async function createWhatsappServices({ phone, message }: FormData) {
         };
     }
 }
+
+export default createWhatsappService

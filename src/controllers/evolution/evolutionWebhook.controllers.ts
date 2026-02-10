@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
 import { presenceStore } from "../../store/presence.store";
 import { normalizePhoneForWhatsapp } from "../../utils/phone.utils";
-import { sendConfirmedPresence } from "../../services/presence/sendConfirmedPresence.services";
-import { deleteAppointmentServices } from "../../services/appointment/deleteAppointment.services";
-import { confirmPresenceService } from "../../services/presence/confirmPresence.services";
+import sendConfirmedPresenceService from "../../services/presence/sendConfirmedPresence.service";
+import deleteAppointmentService from "../../services/appointment/deleteAppointment.service";
+import confirmPresenceService from "../../services/presence/confirmPresence.service";
 
 
-export async function whatsappWebhook(req: Request, res: Response) {
+export async function evolutionWebhookController(req: Request, res: Response) {
 
     const message =
         req.body?.data?.message?.conversation ||
@@ -37,13 +37,13 @@ export async function whatsappWebhook(req: Request, res: Response) {
 
     // ❌ CANCELAMENTO
     if (normalizedMessage === "2") {
-        await sendConfirmedPresence({
+        await sendConfirmedPresenceService({
             phone: phoneForWhatsapp,
             text: "❌ O seu agendamento será cancelado. Para marcar um novo horário, acesse: https://dra.estefanyoliveira.com.br/",
         });
 
         // cancela o agendamento
-        await deleteAppointmentServices(presence.id);
+        await deleteAppointmentService(presence.id);
 
         // remove do store
         const index = presenceStore.indexOf(presence);

@@ -39,8 +39,8 @@ api_emails/
 │   │   ├── email/
 │   │   │   └── emailService.ts      # Serviço de envio de emails (Resend)
 │   │   └── appointment/
-│   │       ├── createAppointmentServices.ts
-│   │       ├── getAppointmentsServices.ts
+│   │       ├── createAppointmentService.ts
+│   │       ├── getAppointmentsService.ts
 │   │       └── deleteAppointmentsServices.ts
 │   ├── utils/            # Funções utilitárias
 │   │   ├── parseAddress.ts      # Parser de endereços

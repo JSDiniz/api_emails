@@ -3,7 +3,7 @@ import "dotenv/config";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-export async function sendEmailToDoctor(data: any) {
+const sendEmailToDoctor = async (data: any) => {
   const { name, clinic, service, date, time } = data;
 
   const formattedDate = new Date(date).toLocaleDateString("pt-BR");
@@ -29,7 +29,7 @@ export async function sendEmailToDoctor(data: any) {
   }
 }
 
-export async function sendEmailToPatient(data: any) {
+const sendEmailToPatient = async (data: any) => {
   const { clinic, service, date, time } = data;
 
   const formattedDate = new Date(date).toLocaleDateString("pt-BR");
@@ -55,7 +55,7 @@ export async function sendEmailToPatient(data: any) {
   }
 }
 
-export async function sendCancellationEmailToDoctor(data: any) {
+const sendCancellationEmailToDoctor = async (data: any) => {
   const { name, clinic, service, date, time } = data;
 
   const formattedDate = new Date(date).toLocaleDateString("pt-BR");
@@ -97,3 +97,6 @@ export async function sendCancellationEmailToDoctor(data: any) {
     );
   }
 }
+
+
+export { sendEmailToDoctor, sendEmailToPatient, sendCancellationEmailToDoctor }

@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import crypto from "crypto";
-import { sendMessage } from "../../services/whatsapp/sendMessage.services";
+import sendMessageService from "../../services/whatsapp/sendMessage.service";
 
 export function handleWhatsAppWebhookController(req: Request, res: Response) {
 
@@ -51,7 +51,7 @@ export function handleWhatsAppWebhookController(req: Request, res: Response) {
 
             const replyText = `Olá.\n\nEste número é utilizado exclusivamente para o envio de avisos, confirmações e lembretes automáticos de agendamento.\n\nNo momento, não realizamos atendimento por este canal.\n\nDesde já, agradecemos a compreensão.`;
 
-            sendMessage(from, replyText)
+            sendMessageService(from, replyText)
         }
     }
 

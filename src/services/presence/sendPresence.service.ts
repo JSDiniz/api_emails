@@ -1,13 +1,13 @@
 import "dotenv/config";
 import { doctorAvailabilityMock } from "../../mocks/doctorAvailability.mock";
-import { sendConfirmedPresence } from "./sendConfirmedPresence.services";
+import sendConfirmedPresenceService from "./sendConfirmedPresence.service";
 import { calendar } from "../../integrations/google/googleCalendar";
 import { presenceStore } from "../../store/presence.store";
 import { sleep } from "../../utils/async";
 
 const calendarId = process.env.GOOGLE_CALENDAR_ID;
 
-export async function sendPresenceServices() {
+const sendPresenceService = async () => {
     const today = new Date();
     const tomorrow = new Date(today);
     tomorrow.setDate(today.getDate() + 1);
@@ -116,7 +116,7 @@ export async function sendPresenceServices() {
     2️⃣ Não poderei ir
     `;
 
-        await sendConfirmedPresence({
+        await sendConfirmedPresenceService({
             phone,
             text: whatsappMessage,
         });
@@ -127,3 +127,5 @@ export async function sendPresenceServices() {
 
     console.log(`Mensagens enviadas para ${sentCount} pacientes.`);
 }
+
+export default sendPresenceService

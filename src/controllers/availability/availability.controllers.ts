@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { getAllAvailability } from "../../services/availability/availability.services";
+import { getAllAvailabilityService } from "../../services/availability/availability.service";
 
 export function availabilityController(req: Request, res: Response) {
-  const data = getAllAvailability();
+  const data = getAllAvailabilityService();
   return res.json(data);
 }

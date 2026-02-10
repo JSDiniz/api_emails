@@ -1,8 +1,8 @@
 import "dotenv/config";
-import { calendar } from "../../integrations/google/googleCalendar";
-import { sendEmailToDoctor, sendEmailToPatient } from "../email/email.services";
 import { FormData } from "../../types/appointmentTypes"
-import { createWhatsappServices } from "../whatsapp/createWhatsapp.services";
+import { calendar } from "../../integrations/google/googleCalendar";
+import createWhatsappService from "../whatsapp/createWhatsapp.service";
+import { sendEmailToDoctor, sendEmailToPatient } from "../email/email.services";
 
 const SEND_WHATSAPP = process.env.SEND_WHATSAPP === "true";
 
@@ -14,7 +14,7 @@ const cityColors: Record<string, string> = {
   Itacoatiara: "11",
 };
 
-export async function createAppointmentServices(data: FormData) {
+const createAppointmentService = async (data: FormData) => {
   const { name, email, phone, clinic, service, date, time, message, startDate, endDate } = data;
 
   // Cor do evento baseada na cidade
@@ -81,7 +81,7 @@ export async function createAppointmentServices(data: FormData) {
 
   if (SEND_WHATSAPP) {
     try {
-      await createWhatsappServices({
+      await createWhatsappService({
         phone,
         message: whatsappMessage,
       });
@@ -108,3 +108,6 @@ export async function createAppointmentServices(data: FormData) {
     message: finalMessage,
   };
 }
+
+
+export default createAppointmentService

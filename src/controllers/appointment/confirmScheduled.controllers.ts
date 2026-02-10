@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { sendPresenceServices } from "../../services/presence/sendPresence.services";
+import sendPresenceService from "../../services/presence/sendPresence.service";
 
 
 const confirmScheduledController = async (req: Request, res: Response) => {
@@ -10,7 +10,7 @@ const confirmScheduledController = async (req: Request, res: Response) => {
 
         console.log("[CRON] send Presence Services executada!");
 
-        await sendPresenceServices()
+        await sendPresenceService()
 
 
         res.status(200).send("Função executada!");

@@ -1,9 +1,9 @@
 // src/modules/availability/availability.service.ts
 
 import { doctorAvailabilityMock } from "../../mocks/doctorAvailability.mock";
-import { DoctorAvailability } from "../../types/availabilityTypes";
 
-
-export function getAllAvailability(): DoctorAvailability[] {
+const getAllAvailabilityService = () => {
   return doctorAvailabilityMock;
 }
+
+export default getAllAvailabilityService
