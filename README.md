@@ -276,5 +276,6 @@ ISC
 
 ## 👤 Autor
 
-Desenvolvido para gerenciamento de agendamentos médicos.
+Junielson S. Diniz
 
+Desenvolvedor responsável por toda a API de agendamentos, incluindo integração com Google Calendar, envio de emails e implementação das funcionalidades principais.
