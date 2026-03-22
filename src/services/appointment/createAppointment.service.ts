@@ -21,7 +21,7 @@ const createAppointmentService = async (data: FormData) => {
   // Cor do evento baseada na cidade
   const eventColor = clinic?.city ? cityColors[clinic.city] || "2" : "2";
 
-  // 1️⃣ Criar evento no Google Calendar
+  // Criar evento no Google Calendar
   await calendar.events.insert({
     calendarId: process.env.GOOGLE_CALENDAR_ID as string,
     requestBody: {
@@ -46,9 +46,8 @@ const createAppointmentService = async (data: FormData) => {
         timeZone: "America/Manaus",
       },
 
-      // ✅ aqui você define a cor do evento
       colorId: eventColor,
-      // ✅ AQUI está a correção
+
       reminders: {
         useDefault: false,
         overrides: [
@@ -58,7 +57,7 @@ const createAppointmentService = async (data: FormData) => {
       },
       extendedProperties: {
         private: {
-          status: "agendado",  // aqui você define o status inicial
+          status: "agendado",
           appointmentId: `${phone}123`,
         },
       },
@@ -99,10 +98,8 @@ const createAppointmentService = async (data: FormData) => {
     }
   }
 
-  // 2️⃣ Email para o doutor
   await sendEmailToDoctor(data);
 
-  // 3️⃣ Email para o paciente (somente se existir email)
   if (email && email.trim() !== "") {
     await sendEmailToPatient(data);
   }

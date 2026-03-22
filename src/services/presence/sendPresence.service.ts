@@ -28,7 +28,6 @@ const sendPresenceService = async () => {
 
 
     if (!availableDay) {
-        console.log("Doutora não atende amanhã.");
         return;
     }
 
@@ -51,15 +50,12 @@ const sendPresenceService = async () => {
         const desc = event.description;
         if (!desc) continue;
 
-        console.log("desc -> ", desc)
-
-        //Verificar status primeiro
         const statusMatch = desc.match(/Status:\s*(.*)/);
         const status = statusMatch ? statusMatch[1].trim() : "Agendado";
 
         if (status === "Confirmado") {
             console.log(`Evento ${event.id} já está confirmado, pulando envio de mensagem.`);
-            continue; // não envia mensagem
+            continue;
         }
 
         const formattedDate = new Date(`${dateStr}T12:00:00`).toLocaleDateString(
@@ -67,7 +63,6 @@ const sendPresenceService = async () => {
             { timeZone: "America/Manaus" }
         );
 
-        // Extrair dados do description usando regex
         const pacienteMatch = desc.match(/Paciente:\s*(.*)/);
         const serviceMatch = desc.match(/Serviço:\s*(.*)/);
         const streetMatch = desc.match(/Endereço:\s*(.*)/);
@@ -75,7 +70,7 @@ const sendPresenceService = async () => {
         const cepMatch = desc.match(/CEP:\s*(.*)/);
         const telefoneMatch = desc.match(/Telefone:\s*(.*)/);
 
-        if (!telefoneMatch) continue; // se não tiver telefone, pula
+        if (!telefoneMatch) continue;
 
         const paciente = pacienteMatch ? pacienteMatch[1].trim() : '';
         const service = serviceMatch ? serviceMatch[1].trim() : '';
@@ -84,7 +79,6 @@ const sendPresenceService = async () => {
         const cep = cepMatch ? cepMatch[1].trim() : '';
         const phone = telefoneMatch[1].trim();
 
-        // Pegar horário do evento
         const startTime = event.start?.dateTime || event.start?.date;
         const formattedTime = startTime
             ? new Date(startTime).toLocaleTimeString("pt-BR", {
@@ -93,13 +87,12 @@ const sendPresenceService = async () => {
                 timeZone: "America/Manaus",
             })
             : "";
-        // usar o id do evento como referência única
+
         const appointmentId = event.id;
 
         const normalizedPhone = phone.replace(/\D/g, "");
         const finalPhone = normalizedPhone.startsWith("55") ? normalizedPhone : `55${normalizedPhone}`;
 
-        // Fazer a verificação no presenceStore para verificar se o phone e o id já existem. Dessa forma, evitamos adicionar o mesmo usuário duas vezes.
         const exists = presenceStore.some(
             p => p.phone === finalPhone && p.id === appointmentId
         );
@@ -120,7 +113,6 @@ const sendPresenceService = async () => {
             });
         }
 
-        // Montar mensagem
         const whatsappMessage = `Confirmação de presença 🦷
     
     📍 Local:
@@ -147,11 +139,9 @@ const sendPresenceService = async () => {
 
         // await sendConfirmationSchedulingService(normalizedPhone, paciente, doctorName, formattedDate, formattedTime, local)
 
-        sentCount++; // incrementa apenas quando envia mensagem
+        sentCount++;
         await sleep(2000);
     }
-
-    console.log(`Mensagens enviadas para ${sentCount} pacientes.`);
 }
 
 export default sendPresenceService

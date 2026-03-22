@@ -30,19 +30,15 @@ const handleWhatsAppWebhookController = async (req: Request, res: Response) => {
         return res.sendStatus(403);
     }
 
-    // Requisição legítima da Meta
     const value = req.body.entry?.[0]?.changes?.[0]?.value;
 
     const message = value?.messages?.[0];
     const statuses = value?.statuses?.[0];
 
-
-    // 📩 Mensagem recebida do cliente
     if (message) {
         const from = message.from;
         const text = message.text?.body;
 
-        // 1️⃣ Caso seja clique em botão
         const buttonReply = message.button?.payload;
 
         if (buttonReply) {
@@ -52,20 +48,15 @@ const handleWhatsAppWebhookController = async (req: Request, res: Response) => {
                 return res.sendStatus(200);
             }
 
-            // Ignora cliques duplicados
             if (presence.status === "confirmed" || presence.status === "cancelled") {
                 return res.sendStatus(200);;
             }
 
             if (buttonReply === "confirm_yes") {
 
-                //atualizar o calendario
                 const response = await updateGoogleCalendarEventService(presence.id)
 
-                //mplementar a lógica para que, caso a confirmação do agendamento retorne false, o sistema tente realizar o agendamento novamente.
-
                 if (response) {
-                    // Atualiza o status no presenceStore
                     presence.status = "confirmed";
 
                     const replyText = `✅ Presença confirmada. Obrigado!`;
@@ -80,7 +71,6 @@ const handleWhatsAppWebhookController = async (req: Request, res: Response) => {
 
                 sendMessageService(from, replyText)
 
-                // Remove do presenceStore
                 const index = presenceStore.indexOf(presence)
                 if (index !== -1) presenceStore.splice(index, 1)
             }
@@ -95,11 +85,11 @@ const handleWhatsAppWebhookController = async (req: Request, res: Response) => {
         }
     }
 
-    // // 📤 Status de mensagem enviada
+    // // Status de mensagem enviada
     // if (statuses) {
     //     const status = value.statuses[0];
-    //     console.log("📦 Status:", status.status);
-    //     console.log("📞 Para:", status.recipient_id);
+    //     console.log("Status:", status.status);
+    //     console.log("Para:", status.recipient_id);
     // }
 
     return res.sendStatus(200);

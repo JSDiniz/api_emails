@@ -17,7 +17,7 @@ const createWhatsappService = async ({ phone, message }: FormData) => {
         const response = await axios.post(
             `${process.env.EVOLUTION_API_URL}/message/sendText/${process.env.EVOLUTION_INSTANCE}`,
             {
-                number: finalPhone, // ex: 5511999999999
+                number: finalPhone,
                 text: message,
             },
             {

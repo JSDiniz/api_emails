@@ -3,7 +3,6 @@ import { calendar } from "../../integrations/google/googleCalendar";
 const updateGoogleCalendarEventService = async (eventId: string) => {
 
     try {
-        // 1️⃣ Pega o evento atual
         const { data } = await calendar.events.get({
             calendarId: process.env.GOOGLE_CALENDAR_ID as string,
             eventId,
@@ -11,7 +10,6 @@ const updateGoogleCalendarEventService = async (eventId: string) => {
 
         const desc = data.description || "";
 
-        // 2️⃣ Atualiza a descrição do evento
         await calendar.events.patch({
             calendarId: process.env.GOOGLE_CALENDAR_ID as string,
             eventId,

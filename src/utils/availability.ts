@@ -21,13 +21,10 @@ export function isWithinDoctorAvailability(params: {
 
     if (!dayAvailability) return false;
 
-    // 🔹 Verifica se o intervalo inteiro está dentro de algum período
     return dayAvailability.periods.some((period) => {
-        // Cria datas ajustadas para Manaus
         const periodStart = parseDateManaus(date, period.start);
         const periodEnd = parseDateManaus(date, period.end);
 
-        // ✅ O agendamento deve começar **depois ou igual ao início** e terminar **antes ou igual ao fim**
         return startDate >= periodStart && endDate <= periodEnd;
     });
 }

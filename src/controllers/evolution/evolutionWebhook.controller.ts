@@ -5,7 +5,6 @@ import sendConfirmedPresenceService from "../../services/presence/sendConfirmedP
 import deleteAppointmentService from "../../services/appointment/deleteAppointment.service";
 import confirmPresenceService from "../../services/presence/confirmPresence.service";
 
-
 const evolutionWebhookController = async (req: Request, res: Response) => {
 
     const message =
@@ -16,36 +15,29 @@ const evolutionWebhookController = async (req: Request, res: Response) => {
         req.body?.data?.key?.remoteJid
             ?.replace("@s.whatsapp.net", "");
 
-
     if (!message || !phoneRaw) return res.sendStatus(200);
 
     const normalizedMessage = message.trim();
     const phoneForWhatsapp = normalizePhoneForWhatsapp(phoneRaw);
 
-    // ✅ primeiro verifica se existe presença para esse telefone
     const presence = presenceStore.find(item => item.phone === phoneForWhatsapp);
 
     if (!presence) {
-        // telefone não está no store, ignora a mensagem
         return res.sendStatus(200);
     }
 
-    // ✅ CONFIRMAÇÃO
     if (normalizedMessage === "1") {
         await confirmPresenceService(phoneForWhatsapp)
     }
 
-    // ❌ CANCELAMENTO
     if (normalizedMessage === "2") {
         await sendConfirmedPresenceService({
             phone: phoneForWhatsapp,
             text: "❌ O seu agendamento será cancelado. Para marcar um novo horário, acesse: https://dra.estefanyoliveira.com.br/",
         });
 
-        // cancela o agendamento
         await deleteAppointmentService(presence.id);
 
-        // remove do store
         const index = presenceStore.indexOf(presence);
         if (index !== -1) presenceStore.splice(index, 1);
     }

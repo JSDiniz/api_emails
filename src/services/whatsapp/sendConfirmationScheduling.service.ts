@@ -33,7 +33,7 @@ const sendConfirmationSchedulingService = async (
                         sub_type: "quick_reply",
                         index: "0",
                         parameters: [
-                            { type: "payload", payload: "confirm_yes" } // botão "Sim, irei comparecer"
+                            { type: "payload", payload: "confirm_yes" }
                         ]
                     },
                     {
@@ -41,7 +41,7 @@ const sendConfirmationSchedulingService = async (
                         sub_type: "quick_reply",
                         index: "1",
                         parameters: [
-                            { type: "payload", payload: "confirm_no" } // botão "Não poderei comparecer"
+                            { type: "payload", payload: "confirm_no" }
                         ]
                     }
                 ]
