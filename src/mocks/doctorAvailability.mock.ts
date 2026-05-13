@@ -88,6 +88,13 @@ export const doctorAvailabilityMock: DoctorAvailability[] = [
       { date: "2026-05-07", periods: [{ start: "09:00", end: "12:00" }, { start: "14:00", end: "17:00" }, { start: "17:30", end: "20:30" }] },
       { date: "2026-05-08", periods: [{ start: "09:00", end: "12:00" }, { start: "14:00", end: "17:00" }, { start: "17:30", end: "20:30" }] },
       { date: "2026-05-09", periods: [{ start: "08:00", end: "12:00" }, { start: "13:00", end: "17:00" }] },
+
+      // ===== JUNHO 2026 =====
+      { date: "2026-06-01", periods: [{ start: "15:20", end: "18:20" }, { start: "19:00", end: "20:40" }] },
+      { date: "2026-06-02", periods: [{ start: "08:00", end: "12:00" }, { start: "13:20", end: "18:20" }, { start: "19:00", end: "20:40" }] },
+      { date: "2026-06-03", periods: [{ start: "09:00", end: "12:00" }, { start: "13:20", end: "18:20" }, { start: "19:00", end: "20:40" }] },
+      { date: "2026-06-04", periods: [{ start: "09:00", end: "12:00" }, { start: "13:20", end: "18:20" }, { start: "19:00", end: "20:40" }] },
+      { date: "2026-06-05", periods: [{ start: "09:00", end: "12:00" }, { start: "13:20", end: "18:20" }, { start: "19:00", end: "20:40" }] },
     ],
   },
 ];
