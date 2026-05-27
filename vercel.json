@@ -1,9 +1,23 @@
 {
-  "version": 2,
+  "$schema": "https://openapi.vercel.sh/vercel.json",
   "rewrites": [
     {
       "source": "/(.*)",
       "destination": "/api/index.ts"
+    }
+  ],
+  "crons": [
+    {
+      "path": "/appointments/confirm-scheduled",
+      "schedule": "0 12 * * *"
+    },
+    {
+      "path": "/appointments/confirm-scheduled",
+      "schedule": "0 17 * * *"
+    },
+    {
+      "path": "/appointments/confirm-scheduled",
+      "schedule": "0 21 * * *"
     }
   ]
 }
