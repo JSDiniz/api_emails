@@ -5,22 +5,5 @@
       "source": "/(.*)",
       "destination": "/api/index.ts"
     }
-  ],
-  "env": {
-    "NODE_ENV": "production"
-  },
-  "crons": [
-    {
-      "path": "/appointments/confirm-scheduled",
-      "schedule": "0 12 * * *"
-    },
-    {
-      "path": "/appointments/confirm-scheduled",
-      "schedule": "0 17 * * *"
-    },
-    {
-      "path": "/appointments/confirm-scheduled",
-      "schedule": "0 21 * * *"
-    }
   ]
 }
