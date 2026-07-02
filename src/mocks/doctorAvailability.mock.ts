@@ -53,6 +53,26 @@ export const doctorAvailabilityMock: DoctorAvailability[] = [
       { date: "2026-06-23", periods: [{ start: "08:00", end: "12:00" }] },
       { date: "2026-06-27", periods: [{ start: "13:00", end: "17:00" }] },
       { date: "2026-06-30", periods: [{ start: "08:00", end: "12:00" }] },
+
+      // ===== JULHO 2026 =====
+      { date: "2026-07-04", periods: [{ start: "13:00", end: "17:00" }] },
+      { date: "2026-07-21", periods: [{ start: "08:00", end: "12:00" }] },
+      { date: "2026-07-25", periods: [{ start: "13:00", end: "17:00" }] },
+      { date: "2026-07-28", periods: [{ start: "08:00", end: "12:00" }] },
+
+      // ===== AGOSTO 2026 =====
+      { date: "2026-08-01", periods: [{ start: "13:00", end: "17:00" }] },
+      { date: "2026-08-18", periods: [{ start: "08:00", end: "12:00" }] },
+      { date: "2026-08-22", periods: [{ start: "13:00", end: "17:00" }] },
+      { date: "2026-08-25", periods: [{ start: "08:00", end: "12:00" }] },
+      { date: "2026-08-29", periods: [{ start: "13:00", end: "17:00" }] },
+
+
+      // ===== SETEMBRO 2026 =====
+      { date: "2026-09-19", periods: [{ start: "13:00", end: "17:00" }] },
+      { date: "2026-09-22", periods: [{ start: "08:00", end: "12:00" }] },
+      { date: "2026-09-26", periods: [{ start: "13:00", end: "17:00" }] },
+      { date: "2026-09-29", periods: [{ start: "08:00", end: "12:00" }] },
     ],
   },
   {
@@ -101,6 +121,30 @@ export const doctorAvailabilityMock: DoctorAvailability[] = [
       { date: "2026-06-03", periods: [{ start: "09:00", end: "12:00" }, { start: "13:20", end: "18:20" }, { start: "19:00", end: "20:40" }] },
       { date: "2026-06-04", periods: [{ start: "09:00", end: "12:00" }, { start: "13:20", end: "18:20" }, { start: "19:00", end: "20:40" }] },
       { date: "2026-06-05", periods: [{ start: "09:00", end: "12:00" }, { start: "13:20", end: "18:20" }, { start: "19:00", end: "20:40" }] },
+
+      // ===== JULHO 2026 =====
+      { date: "2026-07-06", periods: [{ start: "15:20", end: "18:20" }, { start: "19:00", end: "20:40" }] },
+      { date: "2026-07-07", periods: [{ start: "09:00", end: "12:00" }, { start: "13:20", end: "18:20" }, { start: "19:00", end: "20:40" }] },
+      { date: "2026-07-08", periods: [{ start: "09:00", end: "12:00" }, { start: "13:20", end: "18:20" }, { start: "19:00", end: "20:40" }] },
+      { date: "2026-07-09", periods: [{ start: "09:00", end: "12:00" }, { start: "13:20", end: "18:20" }, { start: "19:00", end: "20:40" }] },
+      { date: "2026-07-10", periods: [{ start: "09:00", end: "12:00" }, { start: "13:20", end: "18:20" }, { start: "19:00", end: "20:40" }] },
+      { date: "2026-07-11", periods: [{ start: "09:00", end: "12:00" }, { start: "13:20", end: "18:20" }, { start: "19:00", end: "20:40" }] },
+
+      // ===== AGOSTO 2026 =====
+      { date: "2026-08-03", periods: [{ start: "15:20", end: "18:20" }, { start: "19:00", end: "20:40" }] },
+      { date: "2026-08-04", periods: [{ start: "09:00", end: "12:00" }, { start: "13:20", end: "18:20" }, { start: "19:00", end: "20:40" }] },
+      { date: "2026-08-05", periods: [{ start: "09:00", end: "12:00" }, { start: "13:20", end: "18:20" }, { start: "19:00", end: "20:40" }] },
+      { date: "2026-08-06", periods: [{ start: "09:00", end: "12:00" }, { start: "13:20", end: "18:20" }, { start: "19:00", end: "20:40" }] },
+      { date: "2026-08-07", periods: [{ start: "09:00", end: "12:00" }, { start: "13:20", end: "18:20" }, { start: "19:00", end: "20:40" }] },
+      { date: "2026-08-08", periods: [{ start: "09:00", end: "12:00" }, { start: "13:20", end: "18:20" }, { start: "19:00", end: "20:40" }] },
+      { date: "2026-08-31", periods: [{ start: "15:20", end: "18:20" }, { start: "19:00", end: "20:40" }] },
+
+      // ===== SETEMBRO 2026 =====
+      { date: "2026-08-01", periods: [{ start: "09:00", end: "12:00" }, { start: "13:20", end: "18:20" }, { start: "19:00", end: "20:40" }] },
+      { date: "2026-08-02", periods: [{ start: "09:00", end: "12:00" }, { start: "13:20", end: "18:20" }, { start: "19:00", end: "20:40" }] },
+      { date: "2026-08-03", periods: [{ start: "09:00", end: "12:00" }, { start: "13:20", end: "18:20" }, { start: "19:00", end: "20:40" }] },
+      { date: "2026-08-04", periods: [{ start: "09:00", end: "12:00" }, { start: "13:20", end: "18:20" }, { start: "19:00", end: "20:40" }] },
+      { date: "2026-08-05", periods: [{ start: "09:00", end: "12:00" }, { start: "13:20", end: "18:20" }, { start: "19:00", end: "20:40" }] },
     ],
   },
 ];
