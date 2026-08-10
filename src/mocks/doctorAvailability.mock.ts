@@ -73,6 +73,25 @@ export const doctorAvailabilityMock: DoctorAvailability[] = [
       { date: "2026-09-22", periods: [{ start: "08:00", end: "12:00" }] },
       { date: "2026-09-26", periods: [{ start: "13:00", end: "17:00" }] },
       { date: "2026-09-29", periods: [{ start: "08:00", end: "12:00" }] },
+
+      // ===== OUTUBRO 2026 =====
+      { date: "2026-10-03", periods: [{ start: "13:00", end: "17:00" }] },
+      { date: "2026-10-20", periods: [{ start: "08:00", end: "12:00" }] },
+      { date: "2026-10-24", periods: [{ start: "13:00", end: "17:00" }] },
+      { date: "2026-10-27", periods: [{ start: "08:00", end: "12:00" }] },
+      { date: "2026-10-31", periods: [{ start: "13:00", end: "17:00" }] },
+
+      // ===== NOVEMBRO 2026 =====
+      { date: "2026-11-17", periods: [{ start: "08:00", end: "12:00" }] },
+      { date: "2026-11-21", periods: [{ start: "13:00", end: "17:00" }] },
+      { date: "2026-11-24", periods: [{ start: "08:00", end: "12:00" }] },
+      { date: "2026-11-28", periods: [{ start: "13:00", end: "17:00" }] },
+
+      // ===== NOVEMBRO 2026 =====
+      { date: "2026-12-19", periods: [{ start: "13:00", end: "17:00" }] },
+      { date: "2026-12-22", periods: [{ start: "08:00", end: "12:00" }] },
+      { date: "2026-12-26", periods: [{ start: "13:00", end: "17:00" }] },
+      { date: "2026-12-29", periods: [{ start: "08:00", end: "12:00" }] },
     ],
   },
   {
@@ -137,7 +156,6 @@ export const doctorAvailabilityMock: DoctorAvailability[] = [
       { date: "2026-08-06", periods: [{ start: "09:00", end: "12:00" }, { start: "13:20", end: "18:20" }, { start: "19:00", end: "20:40" }] },
       { date: "2026-08-07", periods: [{ start: "09:00", end: "12:00" }, { start: "13:20", end: "18:20" }, { start: "19:00", end: "20:40" }] },
       { date: "2026-08-08", periods: [{ start: "09:00", end: "12:00" }, { start: "13:20", end: "18:20" }, { start: "19:00", end: "20:40" }] },
-      { date: "2026-08-31", periods: [{ start: "15:20", end: "18:20" }, { start: "19:00", end: "20:40" }] },
 
       // ===== SETEMBRO 2026 =====
       { date: "2026-09-01", periods: [{ start: "09:00", end: "12:00" }, { start: "13:20", end: "18:20" }, { start: "19:00", end: "20:40" }] },
@@ -145,6 +163,27 @@ export const doctorAvailabilityMock: DoctorAvailability[] = [
       { date: "2026-09-03", periods: [{ start: "09:00", end: "12:00" }, { start: "13:20", end: "18:20" }, { start: "19:00", end: "20:40" }] },
       { date: "2026-09-04", periods: [{ start: "09:00", end: "12:00" }, { start: "13:20", end: "18:20" }, { start: "19:00", end: "20:40" }] },
       { date: "2026-09-05", periods: [{ start: "09:00", end: "12:00" }, { start: "13:20", end: "18:20" }, { start: "19:00", end: "20:40" }] },
+
+      // ===== OUTUBRO 2026 =====
+      { date: "2026-10-06", periods: [{ start: "15:20", end: "18:20" }, { start: "19:00", end: "20:40" }] },
+      { date: "2026-10-07", periods: [{ start: "09:00", end: "12:00" }, { start: "13:20", end: "18:20" }, { start: "19:00", end: "20:40" }] },
+      { date: "2026-10-08", periods: [{ start: "09:00", end: "12:00" }, { start: "13:20", end: "18:20" }, { start: "19:00", end: "20:40" }] },
+      { date: "2026-10-09", periods: [{ start: "09:00", end: "12:00" }, { start: "13:20", end: "18:20" }, { start: "19:00", end: "20:40" }] },
+      { date: "2026-10-10", periods: [{ start: "09:00", end: "12:00" }, { start: "13:20", end: "18:20" }, { start: "19:00", end: "20:40" }] },
+
+      // ===== NOVEMBRO 2026 =====
+      { date: "2026-11-03", periods: [{ start: "15:20", end: "18:20" }, { start: "19:00", end: "20:40" }] },
+      { date: "2026-11-04", periods: [{ start: "09:00", end: "12:00" }, { start: "13:20", end: "18:20" }, { start: "19:00", end: "20:40" }] },
+      { date: "2026-11-05", periods: [{ start: "09:00", end: "12:00" }, { start: "13:20", end: "18:20" }, { start: "19:00", end: "20:40" }] },
+      { date: "2026-11-06", periods: [{ start: "09:00", end: "12:00" }, { start: "13:20", end: "18:20" }, { start: "19:00", end: "20:40" }] },
+      { date: "2026-11-07", periods: [{ start: "09:00", end: "12:00" }, { start: "13:20", end: "18:20" }, { start: "19:00", end: "20:40" }] },
+
+      // ===== DEZEMBRO 2026 =====
+      { date: "2026-12-01", periods: [{ start: "15:20", end: "18:20" }, { start: "19:00", end: "20:40" }] },
+      { date: "2026-12-02", periods: [{ start: "09:00", end: "12:00" }, { start: "13:20", end: "18:20" }, { start: "19:00", end: "20:40" }] },
+      { date: "2026-12-03", periods: [{ start: "09:00", end: "12:00" }, { start: "13:20", end: "18:20" }, { start: "19:00", end: "20:40" }] },
+      { date: "2026-12-04", periods: [{ start: "09:00", end: "12:00" }, { start: "13:20", end: "18:20" }, { start: "19:00", end: "20:40" }] },
+      { date: "2026-12-05", periods: [{ start: "09:00", end: "12:00" }, { start: "13:20", end: "18:20" }, { start: "19:00", end: "20:40" }] },
     ],
   },
 ];
