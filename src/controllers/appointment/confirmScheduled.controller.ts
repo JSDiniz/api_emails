@@ -4,7 +4,9 @@ import sendPresenceService from "../../services/presence/sendPresence.service";
 
 const confirmScheduledController = async (req: Request, res: Response) => {
 
-    if (!req.headers["x-vercel-cron"]) {
+    const authHeader = req.headers.authorization;
+
+    if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
         return res.status(401).send("Unauthorized");
     }
 
