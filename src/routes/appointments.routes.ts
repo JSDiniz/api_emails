@@ -10,7 +10,7 @@ const appointmentsRoutes = Router();
 
 appointmentsRoutes.post("/", checkDoctorAvailabilityMiddleware, createAppointmentController);
 appointmentsRoutes.get("/", getAppointmentsController);
-appointmentsRoutes.post("/confirm-scheduled", confirmScheduledController);
+appointmentsRoutes.get("/confirm-scheduled", confirmScheduledController);
 appointmentsRoutes.delete("/:idEvent", deleteAppointmentsController);
 
 export default appointmentsRoutes;
