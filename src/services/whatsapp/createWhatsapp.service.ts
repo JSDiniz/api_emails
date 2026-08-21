@@ -19,6 +19,7 @@ const createWhatsappService = async ({ phone, message }: FormData) => {
             {
                 number: finalPhone,
                 text: message,
+                linkPreview: false,
             },
             {
                 headers: {

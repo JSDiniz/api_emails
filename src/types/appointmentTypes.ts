@@ -6,6 +6,7 @@ type ClinicAddress = {
     city: string;
     state: string;
     zip: string;
+    googleMapsUrl: string;
 };
 
 export interface FormData {

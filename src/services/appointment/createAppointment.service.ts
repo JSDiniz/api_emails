@@ -69,23 +69,23 @@ const createAppointmentService = async (data: FormData) => {
     { timeZone: "America/Manaus" }
   );
 
+  const address = `${clinic.street}, ${clinic.number}, ${clinic.neighborhood}, ${clinic.city} - ${clinic.state}, ${clinic.zip}`;
+
   const whatsappMessage = `Agendamento confirmado ✅
 
-  📍 Local:
-  ${clinic.street}, ${clinic.number}
-  ${clinic.neighborhood}
-  ${clinic.city} - ${clinic.state}
-  CEP: ${clinic.zip}
-  
   🦷 Serviço: ${service}
   📅 Data: ${formattedDate}
   ⏰ Horário: ${time}
+
+  📍 Local: ${address}
+
+  🗺️ Como chegar: ${clinic.googleMapsUrl}
   `;
 
   if (SEND_WHATSAPP) {
     try {
       //Evolution
-      await createWhatsappService({
+      const whatsappResult = await createWhatsappService({
         phone,
         message: whatsappMessage,
       });
