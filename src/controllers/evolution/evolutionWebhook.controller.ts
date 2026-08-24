@@ -26,14 +26,14 @@ const evolutionWebhookController = async (req: Request, res: Response) => {
         return res.sendStatus(200);
     }
 
-    if (normalizedMessage === "1") {
+    if (["1", "1️⃣"].includes(normalizedMessage)) {
         await confirmPresenceService(phoneForWhatsapp)
     }
 
-    if (normalizedMessage === "2") {
+    if (["2", "2️⃣"].includes(normalizedMessage)) {
         await sendConfirmedPresenceService({
             phone: phoneForWhatsapp,
-            text: "❌ O seu agendamento será cancelado. Para marcar um novo horário, acesse: https://dra.estefanyoliveira.com.br/",
+            text: "📅 Para reagendar um novo atendimento, acesse: https://dra.estefanyoliveira.com.br/",
         });
 
         await deleteAppointmentService(presence.id);

@@ -18,25 +18,16 @@ const buildPresenceMessage = ({
     return `
         Confirmação de presença 🦷
 
-        📍 Local:
-
-        ${street}
-
-        ${city}
-
-        CEP: ${cep}
+        📍 Local: ${street}, ${city} - CEP ${cep}
 
         🦷 Serviço: ${service}
-
         📅 Data: ${date}
-
         ⏰ Horário: ${time}
-
         Responda com:
 
         1️⃣ Confirmar presença
 
-        2️⃣ Não poderei ir
+        2️⃣ Reagendar atendimento
     `;
 };
 
