@@ -10,7 +10,6 @@ import getTomorrowDate from "../../utils/getTomorrowDate";
 import { ensureBrazilCountryCode } from "../../utils/phone.utils";
 import buildPresenceMessage from "../../utils/buildPresenceMessage";
 import parseAppointmentDescription from "../../utils/parseAppointmentDescription";
-import { presenceStore } from "../../store/presence.store";
 
 const sendPresenceService = async () => {
 
