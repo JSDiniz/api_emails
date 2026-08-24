@@ -64,6 +64,7 @@ export const doctorAvailabilityMock: DoctorAvailability[] = [
       { date: "2026-08-01", periods: [{ start: "13:00", end: "17:00" }] },
       { date: "2026-08-18", periods: [{ start: "08:00", end: "12:00" }] },
       { date: "2026-08-22", periods: [{ start: "13:00", end: "17:00" }] },
+      { date: "2026-08-24", periods: [{ start: "13:00", end: "17:00" }] },
       { date: "2026-08-25", periods: [{ start: "08:00", end: "12:00" }] },
       { date: "2026-08-29", periods: [{ start: "13:00", end: "17:00" }] },
 

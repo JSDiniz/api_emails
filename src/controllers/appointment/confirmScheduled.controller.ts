@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
 import sendPresenceService from "../../services/presence/sendPresence.service";
-
+const expectedToken = process.env.CRON_SECRET;
 
 const confirmScheduledController = async (req: Request, res: Response) => {
 
     const authHeader = req.headers.authorization;
 
-    if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+    if (!expectedToken || authHeader !== `Bearer ${expectedToken}`) {
         return res.status(401).send("Unauthorized");
     }
 

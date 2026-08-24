@@ -18,6 +18,10 @@
     {
       "path": "/appointments/confirm-scheduled",
       "schedule": "0 21 * * *"
+    },
+    {
+      "path": "/appointments/confirm-scheduled",
+      "schedule": "25 3 * * *"
     }
   ]
 }

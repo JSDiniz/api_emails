@@ -23,3 +23,11 @@ export function normalizePhoneForWhatsapp(phone: string) {
 
   return `${ddi}${ddd}9${number}`;
 }
+
+export function ensureBrazilCountryCode(phone: string) {
+  const normalized = phone.replace(/\D/g, "");
+
+  return normalized.startsWith("55")
+    ? normalized
+    : `55${normalized}`;
+};
