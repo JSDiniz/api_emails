@@ -3,7 +3,6 @@ import { FormData } from "../../types/appointmentTypes"
 import { calendar } from "../../integrations/google/googleCalendar";
 import createWhatsappService from "../whatsapp/createWhatsapp.service";
 import { sendEmailToDoctor, sendEmailToPatient } from "../email/email.services";
-import sendAppointmentConfirmationService from "../whatsapp/sendAppointmentConfirmation.service";
 
 const SEND_WHATSAPP = process.env.SEND_WHATSAPP === "true";
 
@@ -69,7 +68,7 @@ const createAppointmentService = async (data: FormData) => {
     { timeZone: "America/Manaus" }
   );
 
-  const address = `${clinic.street}, ${clinic.number}, ${clinic.neighborhood}, ${clinic.city} - ${clinic.state}, ${clinic.zip}`;
+  const address = `${clinic.street}, ${clinic.number}, ${clinic.neighborhood}, ${clinic.city} - ${clinic.state} - CEP ${clinic.zip}`;
 
   const whatsappMessage = `Agendamento confirmado ✅
 
@@ -85,7 +84,7 @@ const createAppointmentService = async (data: FormData) => {
   if (SEND_WHATSAPP) {
     try {
       //Evolution
-      const whatsappResult = await createWhatsappService({
+      await createWhatsappService({
         phone,
         message: whatsappMessage,
       });
