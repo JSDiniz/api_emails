@@ -21,6 +21,7 @@ const sendConfirmedPresenceService = async ({
         {
             number: finalPhone,
             text,
+            linkPreview: false,
         },
         {
             headers: {
