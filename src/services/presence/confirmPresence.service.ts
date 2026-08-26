@@ -1,140 +1,168 @@
 import { calendar } from "../../integrations/google/googleCalendar";
 import sendConfirmedPresenceService from "./sendConfirmedPresence.service";
-import { normalizePhoneForWhatsapp } from "../../utils/phone.utils";
 
 const confirmPresenceService = async (phone: string) => {
-
     console.log("\n========== [CONFIRM PRESENCE] ==========");
 
     console.log("[CONFIRM] Telefone recebido:", phone);
 
-    const normalizedPhone = phone;
+    const normalizedPhone = phone.replace(/\D/g, "");
 
-    console.log("[CONFIRM] Telefone recebido:", phone);
-    console.log("[CONFIRM] Telefone utilizado na busca:", normalizedPhone);
+    console.log(
+        "[CONFIRM] Telefone utilizado na busca:",
+        normalizedPhone
+    );
 
     const calendarId = process.env.GOOGLE_CALENDAR_ID;
 
     if (!calendarId) {
-        console.error("[CONFIRM] ❌ GOOGLE_CALENDAR_ID não configurado");
+        console.error(
+            "[CONFIRM] ❌ GOOGLE_CALENDAR_ID não configurado"
+        );
+
         return false;
     }
 
     /*
-     * Busca eventos futuros no Google Calendar.
+     * Busca os próximos eventos.
      *
-     * Não usamos mais o presenceStore.
+     * Importante:
+     * Não procuramos mais simplesmente qualquer evento
+     * dos próximos 90 dias.
+     *
+     * Buscamos os próximos eventos e depois selecionamos
+     * o primeiro agendamento válido daquele telefone.
      */
+
     const now = new Date();
 
-    const futureDate = new Date();
+    const futureDate = new Date(now);
     futureDate.setDate(futureDate.getDate() + 90);
 
-    console.log("[CONFIRM] Buscando eventos no Google Calendar...");
+    console.log(
+        "[CONFIRM] Buscando próximos eventos no Google Calendar..."
+    );
 
     const { data } = await calendar.events.list({
         calendarId,
+
         timeMin: now.toISOString(),
         timeMax: futureDate.toISOString(),
+
         singleEvents: true,
         orderBy: "startTime",
+
         maxResults: 2500,
     });
 
     const events = data.items || [];
 
-    console.log("[CONFIRM] Eventos encontrados:", events.length);
+    console.log(
+        "[CONFIRM] Eventos encontrados:",
+        events.length
+    );
 
     /*
-     * Procura o evento pelo telefone dentro da descrição.
+     * Procura o PRIMEIRO evento:
+     *
+     * 1. Que tenha o telefone
+     * 2. Que esteja como "Agendado"
+     *
+     * Como o Google Calendar está ordenado por startTime,
+     * o primeiro encontrado será o próximo agendamento
+     * daquele telefone.
      */
-    const event = events.find((event) => {
 
-        const description = event.description || "";
+    const phoneDigits = normalizedPhone;
 
-        const descriptionDigits = description.replace(/\D/g, "");
-
-        const phoneDigits = normalizedPhone.replace(/\D/g, "");
-
-        const phoneWithoutCountryCode = phoneDigits.startsWith("55")
+    const phoneWithoutCountryCode =
+        phoneDigits.startsWith("55")
             ? phoneDigits.slice(2)
             : phoneDigits;
 
-        return (
+    const event = events.find((event) => {
+        const description = event.description || "";
+
+        const descriptionDigits =
+            description.replace(/\D/g, "");
+
+        const hasPhone =
             descriptionDigits.includes(phoneDigits) ||
-            descriptionDigits.includes(phoneWithoutCountryCode)
-        );
+            descriptionDigits.includes(phoneWithoutCountryCode);
+
+        const isScheduled =
+            /Status:\s*Agendado/i.test(description);
+
+        return hasPhone && isScheduled;
     });
 
     if (!event) {
-
         console.log(
-            "[CONFIRM] ❌ Nenhum agendamento encontrado para:",
+            "[CONFIRM] ❌ Nenhum agendamento AGENDADO encontrado para:",
             normalizedPhone
         );
 
-        console.log("========================================\n");
+        console.log(
+            "========================================\n"
+        );
 
         return false;
     }
 
-    console.log("[CONFIRM] ✅ Agendamento encontrado!");
-    console.log("[CONFIRM] Event ID:", event.id);
-    console.log("[CONFIRM] Título:", event.summary);
+    console.log(
+        "[CONFIRM] ✅ Próximo agendamento encontrado!"
+    );
+
+    console.log(
+        "[CONFIRM] Event ID:",
+        event.id
+    );
+
+    console.log(
+        "[CONFIRM] Título:",
+        event.summary
+    );
+
+    console.log(
+        "[CONFIRM] Início:",
+        event.start?.dateTime || event.start?.date
+    );
 
     const eventId = event.id;
 
     if (!eventId) {
-        console.error("[CONFIRM] ❌ Evento não possui ID");
+        console.error(
+            "[CONFIRM] ❌ Evento não possui ID"
+        );
+
         return false;
     }
 
     const description = event.description || "";
 
-    console.log("[CONFIRM] Descrição atual:");
+    console.log(
+        "[CONFIRM] Descrição atual:"
+    );
+
     console.log(description);
 
     /*
-     * Verifica se o agendamento já foi confirmado.
+     * Atualiza somente o evento que foi encontrado.
      */
-    if (/Status:\s*Confirmado/i.test(description)) {
 
-        console.log(
-            "[CONFIRM] ⚠️ Agendamento já estava confirmado."
-        );
-
-        console.log("========================================\n");
-
-        return false;
-    }
-
-    /*
-     * Verifica se realmente está como Agendado.
-     */
-    if (!/Status:\s*Agendado/i.test(description)) {
-
-        console.log(
-            "[CONFIRM] ⚠️ Evento encontrado, mas não está como Agendado."
-        );
-
-        console.log("========================================\n");
-
-        return false;
-    }
-
-    /*
-     * Atualiza o status no Google Calendar.
-     */
     const updatedDescription = description.replace(
         /Status:\s*Agendado/i,
         "Status: Confirmado"
     );
 
-    console.log("[CONFIRM] Atualizando status no Google Calendar...");
+    console.log(
+        "[CONFIRM] Atualizando status no Google Calendar..."
+    );
 
     await calendar.events.patch({
         calendarId,
         eventId,
+
         requestBody: {
             description: updatedDescription,
         },
@@ -147,6 +175,7 @@ const confirmPresenceService = async (phone: string) => {
     /*
      * Envia confirmação pelo WhatsApp.
      */
+
     console.log(
         "[CONFIRM] Enviando mensagem de confirmação..."
     );
@@ -160,7 +189,9 @@ const confirmPresenceService = async (phone: string) => {
         "[CONFIRM] ✅ Mensagem de confirmação enviada."
     );
 
-    console.log("========================================\n");
+    console.log(
+        "========================================\n"
+    );
 
     return true;
 };
