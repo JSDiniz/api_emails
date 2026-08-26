@@ -6,10 +6,12 @@ const confirmPresenceService = async (phone: string) => {
 
     console.log("\n========== [CONFIRM PRESENCE] ==========");
 
-    const normalizedPhone = normalizePhoneForWhatsapp(phone);
+    console.log("[CONFIRM] Telefone recebido:", phone);
+
+    const normalizedPhone = phone;
 
     console.log("[CONFIRM] Telefone recebido:", phone);
-    console.log("[CONFIRM] Telefone normalizado:", normalizedPhone);
+    console.log("[CONFIRM] Telefone utilizado na busca:", normalizedPhone);
 
     const calendarId = process.env.GOOGLE_CALENDAR_ID;
 
