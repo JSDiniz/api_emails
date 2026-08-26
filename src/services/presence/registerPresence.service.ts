@@ -13,6 +13,17 @@ const registerPresenceService = ({
     date,
     time,
 }: RegisterPresenceParams) => {
+    console.log("\n========== REGISTER PRESENCE ==========");
+    console.log("[PRESENCE] Dados recebidos:");
+    console.log({
+        id,
+        phone,
+        date,
+        time,
+    });
+
+    console.log("[PRESENCE] Store antes:");
+    console.log(presenceStore);
 
     const exists = presenceStore.some(
         presence =>
@@ -20,7 +31,11 @@ const registerPresenceService = ({
             presence.phone === phone
     );
 
+    console.log("[PRESENCE] Já existe?", exists);
+
     if (exists) {
+        console.log("[PRESENCE] Presença já registrada. Não adicionando.");
+        console.log("=======================================\n");
         return;
     }
 
@@ -31,6 +46,14 @@ const registerPresenceService = ({
         time,
         status: "pending",
     });
+
+
+    console.log("[PRESENCE] Presença adicionada com sucesso!");
+
+    console.log("[PRESENCE] Store depois:");
+    console.log(presenceStore);
+
+    console.log("=======================================\n");
 };
 
 export default registerPresenceService;

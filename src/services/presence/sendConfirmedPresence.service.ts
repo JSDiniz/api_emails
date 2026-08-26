@@ -16,6 +16,28 @@ const sendConfirmedPresenceService = async ({
         ? normalizedPhone
         : `55${normalizedPhone}`;
 
+    console.log("========== [SEND WHATSAPP] ==========");
+
+    console.log(
+        "[WHATSAPP] Telefone original:",
+        phone
+    );
+
+    console.log(
+        "[WHATSAPP] Telefone final:",
+        finalPhone
+    );
+
+    console.log(
+        "[WHATSAPP] Mensagem:",
+        text
+    );
+
+    console.log(
+        "[WHATSAPP] URL:",
+        `${process.env.EVOLUTION_API_URL}/message/sendText/${process.env.EVOLUTION_INSTANCE}`
+    );
+
     await axios.post(
         `${process.env.EVOLUTION_API_URL}/message/sendText/${process.env.EVOLUTION_INSTANCE}`,
         {
@@ -29,6 +51,10 @@ const sendConfirmedPresenceService = async ({
                 "Content-Type": "application/json",
             },
         }
+    );
+
+    console.log(
+        "[WHATSAPP] ✅ Mensagem enviada pela Evolution."
     );
 }
 

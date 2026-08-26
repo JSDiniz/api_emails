@@ -13,9 +13,15 @@ import parseAppointmentDescription from "../../utils/parseAppointmentDescription
 
 const sendPresenceService = async () => {
 
+    console.log("========== [CRON] INÍCIO ==========");
+
     const date = getTomorrowDate();
 
+    console.log("[CRON] Data de amanhã:", date);
+
     const availableDay = getAvailableDayService(date);
+
+    console.log("[CRON] Disponibilidade encontrada:", availableDay);
 
     if (!availableDay) {
         console.log(
@@ -27,7 +33,16 @@ const sendPresenceService = async () => {
 
     const events = await getAppointmentsByDateService(date);
 
+    console.log("[CRON] Eventos encontrados:", events.length);
+    console.log(
+        "[CRON] IDs dos eventos:",
+        events.map(event => event.id)
+    );
+
     for (const event of events) {
+
+        console.log("--------------------------------");
+        console.log("[CRON] Processando evento:", event.id);
 
         if (!event.description) {
             continue;
@@ -36,6 +51,8 @@ const sendPresenceService = async () => {
         const appointment = parseAppointmentDescription(
             event.description
         );
+
+        console.log("[CRON] Appointment:", appointment);
 
         if (appointment.status === "Confirmado") {
             console.log(
@@ -72,12 +89,22 @@ const sendPresenceService = async () => {
 
         const phone = ensureBrazilCountryCode(appointment.phone);
 
+        console.log("[CRON] Telefone original:", appointment.phone);
+        console.log("[CRON] Telefone normalizado:", phone);
+        console.log("[CRON] Data:", formattedDate);
+        console.log("[CRON] Horário:", formattedTime);
+
         registerPresenceService({
             id: event.id!,
             phone,
             date: formattedDate,
             time: formattedTime,
         });
+
+        console.log(
+            "[CRON] Presence registrada para evento:",
+            event.id
+        );
 
         const message = buildPresenceMessage({
             street: appointment.street,
@@ -88,13 +115,19 @@ const sendPresenceService = async () => {
             time: formattedTime,
         });
 
+        console.log("[CRON] Enviando WhatsApp...");
+
         await sendConfirmedPresenceService({
             phone: appointment.phone,
             text: message,
         });
 
+        console.log("[CRON] WhatsApp enviado.");
+
         await sleep(2000);
     }
+
+    console.log("========== [CRON] FIM ==========");
 };
 
 export default sendPresenceService;
