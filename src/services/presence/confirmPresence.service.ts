@@ -1,7 +1,9 @@
 import { calendar } from "../../integrations/google/googleCalendar";
 import sendConfirmedPresenceService from "./sendConfirmedPresence.service";
+import { getManausDate, getTomorrowManausDate } from "../../utils/date.utils";
 
 const confirmPresenceService = async (phone: string) => {
+
     console.log("\n========== [CONFIRM PRESENCE] ==========");
 
     console.log("[CONFIRM] Telefone recebido:", phone);
@@ -23,33 +25,57 @@ const confirmPresenceService = async (phone: string) => {
         return false;
     }
 
-    /*
-     * Busca os próximos eventos.
-     *
-     * Importante:
-     * Não procuramos mais simplesmente qualquer evento
-     * dos próximos 90 dias.
-     *
-     * Buscamos os próximos eventos e depois selecionamos
-     * o primeiro agendamento válido daquele telefone.
-     */
+    // ==========================================
+    // DATA DO AGENDAMENTO
+    // ==========================================
 
-    const now = new Date();
-
-    const futureDate = new Date(now);
-    futureDate.setDate(futureDate.getDate() + 90);
+    const tomorrowManaus = getTomorrowManausDate();
 
     console.log(
-        "[CONFIRM] Buscando próximos eventos no Google Calendar..."
+        "[CONFIRM] Data atual em Manaus:",
+        getManausDate()
     );
+
+    console.log(
+        "[CONFIRM] Buscando agendamento de amanhã:",
+        tomorrowManaus
+    );
+
+    // ==========================================
+    // INTERVALO DO DIA EM MANAUS
+    // ==========================================
+
+    const startOfDay = new Date(
+        `${tomorrowManaus}T00:00:00-04:00`
+    );
+
+    const endOfDay = new Date(
+        `${tomorrowManaus}T23:59:59.999-04:00`
+    );
+
+    console.log(
+        "[CONFIRM] Início do período:",
+        startOfDay.toISOString()
+    );
+
+    console.log(
+        "[CONFIRM] Fim do período:",
+        endOfDay.toISOString()
+    );
+
+    // ==========================================
+    // BUSCAR SOMENTE EVENTOS DE AMANHÃ
+    // ==========================================
 
     const { data } = await calendar.events.list({
         calendarId,
 
-        timeMin: now.toISOString(),
-        timeMax: futureDate.toISOString(),
+        timeMin: startOfDay.toISOString(),
+
+        timeMax: endOfDay.toISOString(),
 
         singleEvents: true,
+
         orderBy: "startTime",
 
         maxResults: 2500,
@@ -58,20 +84,15 @@ const confirmPresenceService = async (phone: string) => {
     const events = data.items || [];
 
     console.log(
-        "[CONFIRM] Eventos encontrados:",
+        "[CONFIRM] Eventos encontrados para",
+        tomorrowManaus,
+        ":",
         events.length
     );
 
-    /*
-     * Procura o PRIMEIRO evento:
-     *
-     * 1. Que tenha o telefone
-     * 2. Que esteja como "Agendado"
-     *
-     * Como o Google Calendar está ordenado por startTime,
-     * o primeiro encontrado será o próximo agendamento
-     * daquele telefone.
-     */
+    // ==========================================
+    // NORMALIZAÇÃO DO TELEFONE
+    // ==========================================
 
     const phoneDigits = normalizedPhone;
 
@@ -80,26 +101,45 @@ const confirmPresenceService = async (phone: string) => {
             ? phoneDigits.slice(2)
             : phoneDigits;
 
+    // ==========================================
+    // PROCURAR AGENDAMENTO
+    // ==========================================
+
     const event = events.find((event) => {
-        const description = event.description || "";
+
+        const description =
+            event.description || "";
 
         const descriptionDigits =
             description.replace(/\D/g, "");
 
         const hasPhone =
             descriptionDigits.includes(phoneDigits) ||
-            descriptionDigits.includes(phoneWithoutCountryCode);
+            descriptionDigits.includes(
+                phoneWithoutCountryCode
+            );
 
         const isScheduled =
-            /Status:\s*Agendado/i.test(description);
+            /Status:\s*Agendado/i.test(
+                description
+            );
 
-        return hasPhone && isScheduled;
+        return (
+            hasPhone &&
+            isScheduled
+        );
     });
 
     if (!event) {
+
         console.log(
             "[CONFIRM] ❌ Nenhum agendamento AGENDADO encontrado para:",
             normalizedPhone
+        );
+
+        console.log(
+            "[CONFIRM] Data procurada:",
+            tomorrowManaus
         );
 
         console.log(
@@ -110,7 +150,7 @@ const confirmPresenceService = async (phone: string) => {
     }
 
     console.log(
-        "[CONFIRM] ✅ Próximo agendamento encontrado!"
+        "[CONFIRM] ✅ Agendamento encontrado!"
     );
 
     console.log(
@@ -125,12 +165,14 @@ const confirmPresenceService = async (phone: string) => {
 
     console.log(
         "[CONFIRM] Início:",
-        event.start?.dateTime || event.start?.date
+        event.start?.dateTime ||
+        event.start?.date
     );
 
     const eventId = event.id;
 
     if (!eventId) {
+
         console.error(
             "[CONFIRM] ❌ Evento não possui ID"
         );
@@ -138,7 +180,8 @@ const confirmPresenceService = async (phone: string) => {
         return false;
     }
 
-    const description = event.description || "";
+    const description =
+        event.description || "";
 
     console.log(
         "[CONFIRM] Descrição atual:"
@@ -146,14 +189,49 @@ const confirmPresenceService = async (phone: string) => {
 
     console.log(description);
 
-    /*
-     * Atualiza somente o evento que foi encontrado.
-     */
+    // ==========================================
+    // VERIFICAR STATUS
+    // ==========================================
 
-    const updatedDescription = description.replace(
-        /Status:\s*Agendado/i,
-        "Status: Confirmado"
-    );
+    if (
+        /Status:\s*Confirmado/i.test(
+            description
+        )
+    ) {
+
+        console.log(
+            "[CONFIRM] ⚠️ Agendamento já estava confirmado."
+        );
+
+        console.log(
+            "========================================\n"
+        );
+
+        return false;
+    }
+
+    if (
+        !/Status:\s*Agendado/i.test(
+            description
+        )
+    ) {
+
+        console.log(
+            "[CONFIRM] ⚠️ Evento encontrado, mas não está como Agendado."
+        );
+
+        return false;
+    }
+
+    // ==========================================
+    // ATUALIZAR STATUS
+    // ==========================================
+
+    const updatedDescription =
+        description.replace(
+            /Status:\s*Agendado/i,
+            "Status: Confirmado"
+        );
 
     console.log(
         "[CONFIRM] Atualizando status no Google Calendar..."
@@ -164,7 +242,8 @@ const confirmPresenceService = async (phone: string) => {
         eventId,
 
         requestBody: {
-            description: updatedDescription,
+            description:
+                updatedDescription,
         },
     });
 
@@ -172,9 +251,9 @@ const confirmPresenceService = async (phone: string) => {
         "[CONFIRM] ✅ Status atualizado para Confirmado."
     );
 
-    /*
-     * Envia confirmação pelo WhatsApp.
-     */
+    // ==========================================
+    // ENVIAR WHATSAPP
+    // ==========================================
 
     console.log(
         "[CONFIRM] Enviando mensagem de confirmação..."
@@ -182,7 +261,8 @@ const confirmPresenceService = async (phone: string) => {
 
     await sendConfirmedPresenceService({
         phone: normalizedPhone,
-        text: "✅ Presença confirmada. Obrigado!",
+        text:
+            "✅ Presença confirmada. Obrigado!",
     });
 
     console.log(
