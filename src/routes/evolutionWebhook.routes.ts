@@ -3,7 +3,7 @@ import evolutionWebhookController from "../controllers/evolution/evolutionWebhoo
 
 const evolutionWebhookRoutes = Router();
 
-// 🔹 recebe eventos do WhatsApp (webhook)
+// recebe eventos do WhatsApp (webhook)
 evolutionWebhookRoutes.post("/", evolutionWebhookController);
 
 export default evolutionWebhookRoutes;

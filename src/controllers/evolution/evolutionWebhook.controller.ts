@@ -26,23 +26,32 @@ const evolutionWebhookController = async (req: Request, res: Response) => {
         return res.sendStatus(200);
     }
 
-    if (["1", "1️⃣"].includes(normalizedMessage)) {
-        await confirmPresenceService(phoneForWhatsapp)
+    try {
+        if (["1", "1️⃣"].includes(normalizedMessage)) {
+            await confirmPresenceService(phoneForWhatsapp);
+        }
+
+        if (["2", "2️⃣"].includes(normalizedMessage)) {
+            await sendConfirmedPresenceService({
+                phone: phoneForWhatsapp,
+                text: "📅 Para reagendar um novo atendimento, acesse: https://dra.estefanyoliveira.com.br/",
+            });
+
+            await deleteAppointmentService(presence.id);
+
+            const index = presenceStore.indexOf(presence);
+
+            if (index !== -1) {
+                presenceStore.splice(index, 1);
+            }
+        }
+
+        return res.sendStatus(200);
+
+    } catch (error) {
+        console.error("Erro no evolutionWebhookController:", error);
+        return res.sendStatus(500);
     }
-
-    if (["2", "2️⃣"].includes(normalizedMessage)) {
-        await sendConfirmedPresenceService({
-            phone: phoneForWhatsapp,
-            text: "📅 Para reagendar um novo atendimento, acesse: https://dra.estefanyoliveira.com.br/",
-        });
-
-        await deleteAppointmentService(presence.id);
-
-        const index = presenceStore.indexOf(presence);
-        if (index !== -1) presenceStore.splice(index, 1);
-    }
-
-    return res.sendStatus(200);
 }
 
 export default evolutionWebhookController

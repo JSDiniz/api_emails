@@ -79,6 +79,8 @@ const createAppointmentService = async (data: FormData) => {
   📍 Local: ${address}
 
   🗺️ Como chegar: ${clinic.googleMapsUrl}
+
+  📲 Siga nosso Instagram e acompanhe conteúdos para cuidar melhor do seu sorriso: https://www.instagram.com/egodontologiaintegradamanaus/
   `;
 
   if (SEND_WHATSAPP) {
