@@ -77,6 +77,7 @@ const createAppointmentService = async (data: FormData) => {
   ⏰ Horário: ${time}
 
   📍 Local: ${address}
+  🏢 1º andar - sala 04 - interfonar 104
 
   🗺️ Como chegar: ${clinic.googleMapsUrl}
 
