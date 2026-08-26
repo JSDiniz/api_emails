@@ -1,102 +1,166 @@
 import { calendar } from "../../integrations/google/googleCalendar";
-import { presenceStore } from "../../store/presence.store";
 import sendConfirmedPresenceService from "./sendConfirmedPresence.service";
+import { normalizePhoneForWhatsapp } from "../../utils/phone.utils";
 
 const confirmPresenceService = async (phone: string) => {
-    console.log("========== [CONFIRM PRESENCE] ==========");
 
-    console.log(
-        "[CONFIRM] Telefone recebido:",
-        phone
-    );
+    console.log("\n========== [CONFIRM PRESENCE] ==========");
 
-    console.log(
-        "[CONFIRM] PresenceStore:",
-        presenceStore
-    );
+    const normalizedPhone = normalizePhoneForWhatsapp(phone);
 
-    const presence = presenceStore.find(item => item.phone === phone);
-    console.log(
-        "[CONFIRM] Presence encontrada:",
-        presence
-    );
+    console.log("[CONFIRM] Telefone recebido:", phone);
+    console.log("[CONFIRM] Telefone normalizado:", normalizedPhone);
 
-    if (!presence) {
+    const calendarId = process.env.GOOGLE_CALENDAR_ID;
 
-        console.log(
-            "[CONFIRM] ❌ Presence não encontrada."
-        );
-        return false
-    };
+    if (!calendarId) {
+        console.error("[CONFIRM] ❌ GOOGLE_CALENDAR_ID não configurado");
+        return false;
+    }
 
-    const eventId = presence.id;
+    /*
+     * Busca eventos futuros no Google Calendar.
+     *
+     * Não usamos mais o presenceStore.
+     */
+    const now = new Date();
 
-    console.log(
-        "[CONFIRM] Event ID:",
-        eventId
-    );
+    const futureDate = new Date();
+    futureDate.setDate(futureDate.getDate() + 90);
 
-    console.log(
-        "[CONFIRM] Buscando evento no Google Calendar..."
-    );
+    console.log("[CONFIRM] Buscando eventos no Google Calendar...");
 
-    const { data } = await calendar.events.get({
-        calendarId: process.env.GOOGLE_CALENDAR_ID as string,
-        eventId,
+    const { data } = await calendar.events.list({
+        calendarId,
+        timeMin: now.toISOString(),
+        timeMax: futureDate.toISOString(),
+        singleEvents: true,
+        orderBy: "startTime",
+        maxResults: 2500,
     });
 
-    console.log(
-        "[CONFIRM] Evento encontrado no Google Calendar:",
-        data.id
+    const events = data.items || [];
+
+    console.log("[CONFIRM] Eventos encontrados:", events.length);
+
+    /*
+     * Procura o evento pelo telefone dentro da descrição.
+     */
+    const event = events.find((event) => {
+
+        const description = event.description || "";
+
+        const descriptionDigits = description.replace(/\D/g, "");
+
+        const phoneDigits = normalizedPhone.replace(/\D/g, "");
+
+        const phoneWithoutCountryCode = phoneDigits.startsWith("55")
+            ? phoneDigits.slice(2)
+            : phoneDigits;
+
+        return (
+            descriptionDigits.includes(phoneDigits) ||
+            descriptionDigits.includes(phoneWithoutCountryCode)
+        );
+    });
+
+    if (!event) {
+
+        console.log(
+            "[CONFIRM] ❌ Nenhum agendamento encontrado para:",
+            normalizedPhone
+        );
+
+        console.log("========================================\n");
+
+        return false;
+    }
+
+    console.log("[CONFIRM] ✅ Agendamento encontrado!");
+    console.log("[CONFIRM] Event ID:", event.id);
+    console.log("[CONFIRM] Título:", event.summary);
+
+    const eventId = event.id;
+
+    if (!eventId) {
+        console.error("[CONFIRM] ❌ Evento não possui ID");
+        return false;
+    }
+
+    const description = event.description || "";
+
+    console.log("[CONFIRM] Descrição atual:");
+    console.log(description);
+
+    /*
+     * Verifica se o agendamento já foi confirmado.
+     */
+    if (/Status:\s*Confirmado/i.test(description)) {
+
+        console.log(
+            "[CONFIRM] ⚠️ Agendamento já estava confirmado."
+        );
+
+        console.log("========================================\n");
+
+        return false;
+    }
+
+    /*
+     * Verifica se realmente está como Agendado.
+     */
+    if (!/Status:\s*Agendado/i.test(description)) {
+
+        console.log(
+            "[CONFIRM] ⚠️ Evento encontrado, mas não está como Agendado."
+        );
+
+        console.log("========================================\n");
+
+        return false;
+    }
+
+    /*
+     * Atualiza o status no Google Calendar.
+     */
+    const updatedDescription = description.replace(
+        /Status:\s*Agendado/i,
+        "Status: Confirmado"
     );
 
-    const desc = data.description || "";
-
-    console.log(
-        "[CONFIRM] Descrição antiga:",
-        desc
-    );
+    console.log("[CONFIRM] Atualizando status no Google Calendar...");
 
     await calendar.events.patch({
-        calendarId: process.env.GOOGLE_CALENDAR_ID as string,
+        calendarId,
         eventId,
         requestBody: {
-            description: desc.replace(/Status: .*/, "Status: Confirmado"),
+            description: updatedDescription,
         },
     });
 
     console.log(
-        "[CONFIRM] ✅ Status alterado para Confirmado."
+        "[CONFIRM] ✅ Status atualizado para Confirmado."
     );
 
+    /*
+     * Envia confirmação pelo WhatsApp.
+     */
     console.log(
-        "[CONFIRM] Enviando WhatsApp..."
+        "[CONFIRM] Enviando mensagem de confirmação..."
     );
 
     await sendConfirmedPresenceService({
-        phone,
+        phone: normalizedPhone,
         text: "✅ Presença confirmada. Obrigado!",
     });
 
     console.log(
-        "[CONFIRM] ✅ WhatsApp de confirmação enviado."
+        "[CONFIRM] ✅ Mensagem de confirmação enviada."
     );
 
-    const index = presenceStore.indexOf(presence);
-    if (index !== -1) {
-
-        presenceStore.splice(index, 1)
-        console.log(
-            "[CONFIRM] Presence removida do store."
-        );
-    };
-
-    console.log(
-        "========== [CONFIRM PRESENCE] FIM =========="
-    );
+    console.log("========================================\n");
 
     return true;
-}
+};
 
-
-export default confirmPresenceService
+export default confirmPresenceService;
